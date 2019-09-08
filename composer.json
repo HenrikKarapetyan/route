@@ -10,10 +10,7 @@
       "email": "henrikkarapetyan@gmail.com"
     }
   ],
-  "require": {
-    "henrik/component": "1.*",
-    "henrik/service-locator": "^1.1.5"
-  },
+  "require": {},
   "autoload": {
     "psr-4": {
       "henrik\\route\\": "src"

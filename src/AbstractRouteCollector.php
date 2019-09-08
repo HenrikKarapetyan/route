@@ -8,14 +8,12 @@
 
 namespace henrik\route;
 
-use henrik\component\Component;
-
 
 /**
  * Class AbstractRouteCollector
  * @package henrik\route
  */
-abstract class AbstractRouteCollector extends Component
+abstract class AbstractRouteCollector
 {
 
     /**
