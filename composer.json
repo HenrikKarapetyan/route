@@ -1,0 +1,22 @@
+{
+  "name": "henrik/route",
+  "type": "library",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "description": "Route",
+  "authors": [
+    {
+      "name": "Henrik Karapetyan",
+      "email": "henrikkarapetyan@gmail.com"
+    }
+  ],
+  "require": {
+    "henrik/component": "1.*",
+    "henrik/service-locator": "^1.1.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "henrik\\route\\": "src"
+    }
+  }
+}
