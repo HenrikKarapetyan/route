@@ -2,10 +2,13 @@
 
 namespace henrik\route;
 
+use henrik\route\Interfaces\RouteFinderInterface;
 use henrik\route\Interfaces\RouteInterface;
 
-class RouteFinder extends RouteCollector
+class RouteFinder extends RouteGraph implements RouteFinderInterface
 {
+    public function __construct(private readonly RouteGraph $routeCollector) {}
+
     /**
      * @param array<int|string, string|array<int|string, mixed>> $uriSegments
      *
@@ -13,7 +16,7 @@ class RouteFinder extends RouteCollector
      */
     public function find(array $uriSegments): ?RouteInterface
     {
-        return $this->routeFinder($this->getRoutes(), $uriSegments);
+        return $this->routeFinder($this->routeCollector->getRoutes(), $uriSegments);
     }
 
     /**
@@ -67,7 +70,7 @@ class RouteFinder extends RouteCollector
             return $this->routeFinder($routes, $uriSegments, $routeParams);
         }
 
-        $route = new Route();
+        $route = new RouteData();
         $route->setRouteOptions($routes[RouteGraphBuilder::ROUTE_OPTIONS_KEY]);
         $route->setParams($routeParams);
 

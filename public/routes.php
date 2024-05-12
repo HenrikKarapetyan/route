@@ -1,20 +1,31 @@
 <?php
 
-use henrik\route\RouteCollector;
+use henrik\route\RouteGraph;
 use henrik\route\RouteConstraints;
-use henrik\route\RouteContainer;
+use henrik\route\Route;
 
-RouteContainer::routes(
-    function (RouteCollector $routeCollector) {
+(new Route())->routes(
+    function (RouteGraph $routeCollector) {
         $routeCollector->setGroupName('api');
         $routeCollector->get(
             path: '/home/{id}/{page}',
             handler: function () {
-                return 'ok';
+                echo '<h1>hello from basic handler</h1>';
             },
             constraints: function (RouteConstraints $constraints) {
                 $constraints->set(['id'])->asInteger(1, 34);
                 $constraints->set(['page'])->asString();
+            },
+            middlewars: ['simple', 'xxx'],
+        );
+
+        $routeCollector->get(
+            path: '/home/{name}',
+            handler: function () {
+                echo '<h1>hello Heno</h1>';
+            },
+            constraints: function (RouteConstraints $constraints) {
+                $constraints->set(['nme'])->asString();
             },
             middlewars: ['simple', 'xxx'],
         );

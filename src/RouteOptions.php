@@ -11,7 +11,7 @@ class RouteOptions
      */
     public function __construct(
         private array|string $method,
-        private $handler,
+        private  $handler,
         private array $middlewares
     ) {}
 

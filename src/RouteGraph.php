@@ -12,7 +12,7 @@ namespace henrik\route;
 /**
  * Class RouteCollector.
  */
-class RouteCollector extends AbstractRouteCollector
+class RouteGraph extends AbstractRouteGraph
 {
     /**
      * @var array<mixed>
@@ -41,10 +41,9 @@ class RouteCollector extends AbstractRouteCollector
             $constraints($constraint);
         }
 
-        $options = new RouteOptions($methods, $handler, $middlewars);
-
-        $rp              = new RouteGraphBuilder($route, $options, $constraint);
-        $routeParsedData = $rp->build();
+        $options           = new RouteOptions($methods, $handler, $middlewars);
+        $routeGraphBuilder = new RouteGraphBuilder($route, $options, $constraint);
+        $routeParsedData   = $routeGraphBuilder->build();
 
         if (!empty(self::$routes)) {
             self::$routes = array_merge_recursive($routeParsedData, self::$routes);
@@ -67,7 +66,7 @@ class RouteCollector extends AbstractRouteCollector
     /**
      * @param string $groupName
      *
-     * @return RouteCollector
+     * @return RouteGraph
      */
     public function setGroupName(string $groupName): self
     {

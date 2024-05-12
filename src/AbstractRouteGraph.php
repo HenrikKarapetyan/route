@@ -12,7 +12,7 @@ namespace henrik\route;
 /**
  * Class AbstractRouteCollector.
  */
-abstract class AbstractRouteCollector
+abstract class AbstractRouteGraph
 {
     /**
      * @param array<string>   $methods

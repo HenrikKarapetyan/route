@@ -1,60 +1,125 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Henrik
- * Date: 1/25/2018
- * Time: 10:47 AM.
+ * Copyright (c)  2016
+ * Author  Henrik Karapetyan
+ * Email:  henrikkarapetyan@gmail.com
+ * Country: Armenia
+ * File created:  2019/9/8  4:12:35.
  */
 declare(strict_types=1);
 
 namespace henrik\route;
 
-use henrik\route\Interfaces\RouteInterface;
-
 /**
- * Class Route.
+ * Class RouteContainer.
  */
-class Route implements RouteInterface
+class Route
 {
-    /** @var array<string, mixed> */
-    private array $params = [];
-
-    private RouteOptions $routeOptions;
-
     /**
-     * @return array<string, mixed>
+     * @param callable $callback
      */
-    public function getParams(): array
+    public function routes(callable $callback): void
     {
-        return $this->params;
+        $rc = new RouteGraph();
+        $callback($rc);
     }
 
     /**
-     * @param string $param
-     * @param mixed  $value
+     * @param string   $group
+     * @param callable $callback
      */
-    public function addParam(string $param, mixed $value): void
+    public function group(string $group, callable $callback): void
     {
-        $this->params[$param] = $value;
+        $rc = new RouteGraph();
+        $rc->setGroupName($group);
+        $callback($rc);
     }
 
     /**
-     * @param array<string, mixed> $params
-     *
-     * @return void
+     * @param string          $route
+     * @param callable|string $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
      */
-    public function setParams(array $params): void
+    public function get(string $route, callable|string $handler, ?callable $callback = null, array $middlewars = []): void
     {
-        $this->params = $params;
+        $rc = new RouteGraph();
+        $rc->get($route, $handler, $callback, $middlewars);
     }
 
-    public function getRouteOptions(): RouteOptions
+    /**
+     * @param string          $route
+     * @param callable|string $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     */
+    public function post(string $route, callable|string $handler, ?callable $callback = null, array $middlewars = []): void
     {
-        return $this->routeOptions;
+        $rc = new RouteGraph();
+        $rc->post($route, $handler, $callback, $middlewars);
     }
 
-    public function setRouteOptions(RouteOptions $routeOptions): void
+    /**
+     * @param string          $route
+     * @param string|callable $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     */
+    public function put(string $route, callable|string $handler, ?callable $callback = null, array $middlewars = []): void
     {
-        $this->routeOptions = $routeOptions;
+        $rc = new RouteGraph();
+        $rc->put($route, $handler, $callback, $middlewars);
+    }
+
+    /**
+     * @param string          $route
+     * @param string|callable $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     */
+    public function head(string $route, callable|string $handler, ?callable $callback = null, array $middlewars = []): void
+    {
+        $rc = new RouteGraph();
+        $rc->head($route, $handler, $callback, $middlewars);
+    }
+
+    /**
+     * @param string          $route
+     * @param string|callable $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     */
+    public function patch(
+        string $route,
+        callable|string $handler,
+        ?callable $callback = null,
+        array $middlewars = []
+    ): void {
+        $rc = new RouteGraph();
+        $rc->patch($route, $handler, $callback, $middlewars);
+    }
+
+    /**
+     * @param string          $route
+     * @param string|callable $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     */
+    public function delete(string $route, callable|string $handler, ?callable $callback = null, array $middlewars = []): void
+    {
+        $rc = new RouteGraph();
+        $rc->delete($route, $handler, $callback, $middlewars);
+    }
+
+    /**
+     * @param string          $route
+     * @param string|callable $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     */
+    public function any(string $route, callable|string $handler, ?callable $callback = null, array $middlewars = []): void
+    {
+        $rc = new RouteGraph();
+        $rc->any($route, $handler, $callback, $middlewars);
     }
 }

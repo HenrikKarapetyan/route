@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace henrik\route;
 
 use henrik\route\Exceptions\UrlNotFoundException;
+use henrik\route\Interfaces\RouteFinderInterface;
 use henrik\route\Interfaces\RouteInterface;
 
 /**
  * Class RouteDispatcher.
  */
-class RouteDispatcher
+readonly class RouteDispatcher
 {
+    public function __construct(private RouteFinderInterface $routeFinder) {}
+
     /**
      * @param string|null               $uri
      * @param array<string, int|string> $queryParams
@@ -30,7 +33,7 @@ class RouteDispatcher
             });
         }
 
-        $res = (new RouteFinder())->find($uriSegments);
+        $res = $this->routeFinder->find($uriSegments);
 
         if (!$res instanceof RouteInterface) {
             throw new UrlNotFoundException((string) $fullUri);
