@@ -68,7 +68,7 @@ readonly class RouteFinder implements RouteFinderInterface
      *
      * @return array<string, string>
      */
-    private function parseSegments(array &$routes, array $uriSegments, ?array &$routeParams): array
+    private function parseSegments(array &$routes, array &$uriSegments, ?array &$routeParams): array
     {
         $matches = [];
 
