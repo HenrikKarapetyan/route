@@ -9,19 +9,17 @@ declare(strict_types=1);
 
 namespace henrik\route;
 
+use henrik\route\Interfaces\RouteGraphInterface;
+
 /**
  * Class RouteCollector.
  */
-class RouteGraph extends AbstractRouteGraph
+class RouteGraph implements RouteGraphInterface
 {
     /**
-     * @var array<mixed>
+     * @var array<int|string, array<int|string, mixed>|string>|array<mixed>
      */
-    private static array $routes = [];
-    /**
-     * @var ?string
-     */
-    private ?string $groupName = null;
+    private array $routes = [];
 
     /**
      * {@inheritdoc}
@@ -31,9 +29,13 @@ class RouteGraph extends AbstractRouteGraph
         string $path,
         callable|string $handler,
         ?callable $constraints = null,
-        array $middlewars = []
+        array $middlewars = [],
+        ?string $groupName = null
     ): void {
-        $route      = $this->groupName . $path;
+        $route = $path;
+        if ($groupName) {
+            $route = $groupName . $path;
+        }
         $constraint = null;
 
         if (!is_null($constraints) && is_callable($constraints)) {
@@ -45,41 +47,21 @@ class RouteGraph extends AbstractRouteGraph
         $routeGraphBuilder = new RouteGraphBuilder($route, $options, $constraint);
         $routeParsedData   = $routeGraphBuilder->build();
 
-        if (!empty(self::$routes)) {
-            self::$routes = array_merge_recursive($routeParsedData, self::$routes);
+        if (!empty($this->routes)) {
+            $this->routes = array_merge_recursive($routeParsedData, $this->routes);
 
             return;
         }
 
-        self::$routes = $routeParsedData;
+        $this->routes = $routeParsedData;
 
     }
 
     /**
-     * @return string
-     */
-    public function getGroupName(): string
-    {
-        return !is_null($this->groupName) ? $this->groupName : '';
-    }
-
-    /**
-     * @param string $groupName
-     *
-     * @return RouteGraph
-     */
-    public function setGroupName(string $groupName): self
-    {
-        $this->groupName = $groupName;
-
-        return $this;
-    }
-
-    /**
-     * @return array<mixed>
+     * @return array<int|string, array<int|string, mixed>|string>|array<mixed>
      */
     public function getRoutes(): array
     {
-        return self::$routes;
+        return $this->routes;
     }
 }

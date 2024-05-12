@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace henrik\route\Interfaces;
 
 interface RouteFinderInterface
@@ -10,5 +12,4 @@ interface RouteFinderInterface
      * @return RouteInterface|null
      */
     public function find(array $uriSegments): ?RouteInterface;
-
 }

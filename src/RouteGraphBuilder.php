@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace henrik\route;
 
 /**
- * Class RouteParser.
+ * Class RouteGraphBuilder.
  */
 class RouteGraphBuilder
 {
@@ -41,7 +41,7 @@ class RouteGraphBuilder
     {
         if ($this->route !== '/') {
             $routePartsArray = explode('/', ltrim($this->route, '/'));
-            $this->data      = $this->parser($routePartsArray);
+            $this->data      = $this->segmentsBuilder($routePartsArray);
 
             return $this->data;
         }
@@ -63,9 +63,9 @@ class RouteGraphBuilder
      * @param array<string>                      $routeSegmentsArray
      * @param array<string, string|RouteOptions> $graph
      *
-     * @return array<string, array<int|string, RouteOptions>|string>
+     * @return array<string, array<int|string, RouteOptions>|string>|array<string, RouteOptions>|array<string, array<mixed>>
      */
-    private function parser(array $routeSegmentsArray, array $graph = []): array
+    private function segmentsBuilder(array $routeSegmentsArray, array $graph = []): array
     {
         if (!empty($routeSegmentsArray)) {
             $indexData = array_shift($routeSegmentsArray);
@@ -75,7 +75,7 @@ class RouteGraphBuilder
                 $graphNode = '/' . $this->getConstraints($matches['param']);
             }
 
-            $graph[$graphNode] = $this->parser($routeSegmentsArray, $graph);
+            $graph[$graphNode] = $this->segmentsBuilder($routeSegmentsArray, $graph);
 
             return $graph;
         }

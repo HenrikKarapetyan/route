@@ -12,7 +12,7 @@ namespace henrik\route;
 use henrik\route\Interfaces\RouteInterface;
 
 /**
- * Class Route.
+ * Class RouteData.
  */
 class RouteData implements RouteInterface
 {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace henrik\route;
 
 class RouteOptions
@@ -11,15 +13,23 @@ class RouteOptions
      */
     public function __construct(
         private array|string $method,
-        private  $handler,
+        private $handler,
         private array $middlewares
     ) {}
 
+    /**
+     * @return array<string>|string
+     */
     public function getMethod(): array|string
     {
         return $this->method;
     }
 
+    /**
+     * @param array<string>|string $method
+     *
+     * @return void
+     */
     public function setMethod(array|string $method): void
     {
         $this->method = $method;
@@ -35,11 +45,19 @@ class RouteOptions
         $this->handler = $handler;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getMiddlewares(): array
     {
         return $this->middlewares;
     }
 
+    /**
+     * @param array<string> $middlewares
+     *
+     * @return void
+     */
     public function setMiddlewares(array $middlewares): void
     {
         $this->middlewares = $middlewares;

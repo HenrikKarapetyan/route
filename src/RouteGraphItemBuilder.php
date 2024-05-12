@@ -1,35 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Henrik
- * Date: 4/6/2018
- * Time: 2:03 PM.
- */
+
 declare(strict_types=1);
 
 namespace henrik\route;
 
-/**
- * Class AbstractRouteCollector.
- */
-abstract class AbstractRouteGraph
+class RouteGraphItemBuilder
 {
-    /**
-     * @param array<string>   $methods
-     * @param string          $path
-     * @param string|callable $handler
-     * @param callable|null   $constraints
-     * @param array<string>   $middlewars
-     *
-     * @return void
-     */
-    abstract public function add(
-        array $methods,
-        string $path,
-        callable|string $handler,
-        ?callable $constraints = null,
-        array $middlewars = []
-    ): void;
+    private ?string $groupName = null;
+
+    public function __construct(private readonly RouteGraph $routeGraph) {}
 
     /**
      * @param string          $path
@@ -43,7 +22,7 @@ abstract class AbstractRouteGraph
         ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['GET'], $path, $handler, $constraints, $middlewars);
+        $this->routeGraph->add(['GET'], $path, $handler, $constraints, $middlewars, $this->getGroupName());
     }
 
     /**
@@ -58,7 +37,7 @@ abstract class AbstractRouteGraph
         ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['POST'], $path, $handler, $constraints, $middlewars);
+        $this->routeGraph->add(['POST'], $path, $handler, $constraints, $middlewars, $this->getGroupName());
     }
 
     /**
@@ -73,7 +52,7 @@ abstract class AbstractRouteGraph
         ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['PUT'], $path, $handler, $constraints, $middlewars);
+        $this->routeGraph->add(['PUT'], $path, $handler, $constraints, $middlewars, $this->getGroupName());
     }
 
     /**
@@ -88,7 +67,7 @@ abstract class AbstractRouteGraph
         ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['DELETE'], $path, $handler, $constraints, $middlewars);
+        $this->routeGraph->add(['DELETE'], $path, $handler, $constraints, $middlewars, $this->getGroupName());
     }
 
     /**
@@ -103,7 +82,7 @@ abstract class AbstractRouteGraph
         ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['PATCH'], $path, $handler, $constraints, $middlewars);
+        $this->routeGraph->add(['PATCH'], $path, $handler, $constraints, $middlewars, $this->getGroupName());
     }
 
     /**
@@ -118,7 +97,7 @@ abstract class AbstractRouteGraph
         ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['HEAD'], $path, $handler, $constraints, $middlewars);
+        $this->routeGraph->add(['HEAD'], $path, $handler, $constraints, $middlewars, $this->getGroupName());
     }
 
     /**
@@ -133,6 +112,16 @@ abstract class AbstractRouteGraph
         ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH'], $path, $handler, $constraints, $middlewars);
+        $this->routeGraph->add(['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH'], $path, $handler, $constraints, $middlewars, $this->getGroupName());
+    }
+
+    public function getGroupName(): ?string
+    {
+        return $this->groupName;
+    }
+
+    public function setGroupName(?string $groupName): void
+    {
+        $this->groupName = $groupName;
     }
 }

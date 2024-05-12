@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace henrik\route\Interfaces;
 
 use henrik\route\RouteOptions;
