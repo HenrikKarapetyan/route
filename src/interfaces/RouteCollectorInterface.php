@@ -3,89 +3,136 @@
  * Created by PhpStorm.
  * User: Henrik
  * Date: 4/14/2018
- * Time: 3:05 PM
+ * Time: 3:05 PM.
  */
+declare(strict_types=1);
 
 namespace henrik\route\interfaces;
 
-
 /**
- * Interface RouteCollectorInterface
- * @package henrik\route
+ * Interface RouteCollectorInterface.
  */
 interface RouteCollectorInterface
 {
+    /**
+     * @param array<string>   $methods
+     * @param string          $route
+     * @param string|callable $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     *
+     * @return void
+     */
+    public function add(
+        array $methods,
+        string $route,
+        callable|string $handler,
+        ?callable $callback = null,
+        array $middlewars = []
+    ): void;
 
     /**
-     * @param $methods
-     * @param $route
-     * @param $handler
-     * @param callable|null $callback
-     * @param array $middlewars
-     * @return mixed
+     * @param string          $route
+     * @param string|callable $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     *
+     * @return void
      */
-    public function add($methods, $route, $handler, callable $callback = null, $middlewars = []);
+    public function get(
+        string $route,
+        callable|string $handler,
+        ?callable $callback = null,
+        array $middlewars = []
+    ): void;
 
     /**
-     * @param $route
-     * @param $handler
-     * @param callable|null $callback
-     * @param array $middlewars
-     * @return mixed
+     * @param string          $route
+     * @param callable|string $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     *
+     * @return void
      */
-    public function get($route, $handler, callable $callback = null, $middlewars = []);
+    public function post(
+        string $route,
+        callable|string $handler,
+        ?callable $callback = null,
+        array $middlewars = []
+    ): void;
 
     /**
-     * @param $route
-     * @param $handler
-     * @param callable|null $callback
-     * @param array $middlewars
-     * @return mixed
+     * @param string          $route
+     * @param string|callable $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     *
+     * @return void
      */
-    public function post($route, $handler, callable $callback = null, $middlewars = []);
+    public function put(
+        string $route,
+        callable|string $handler,
+        ?callable $callback = null,
+        array $middlewars = []
+    ): void;
 
     /**
-     * @param $route
-     * @param $handler
-     * @param callable|null $callback
-     * @param array $middlewars
-     * @return mixed
+     * @param string          $route
+     * @param callable|string $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     *
+     * @return void
      */
-    public function put($route, $handler, callable $callback = null, $middlewars = []);
+    public function delete(
+        string $route,
+        callable|string $handler,
+        ?callable $callback = null,
+        array $middlewars = []
+    ): void;
 
     /**
-     * @param $route
-     * @param $handler
-     * @param callable|null $callback
-     * @param array $middlewars
-     * @return mixed
+     * @param string          $route
+     * @param string|callable $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     *
+     * @return void
      */
-    public function delete($route, $handler, callable $callback = null, $middlewars = []);
+    public function patch(
+        string $route,
+        callable|string $handler,
+        ?callable $callback = null,
+        $middlewars = []
+    ): void;
 
     /**
-     * @param $route
-     * @param $handler
-     * @param callable|null $callback
-     * @param array $middlewars
-     * @return mixed
+     * @param string          $route
+     * @param string|callable $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     *
+     * @return void
      */
-    public function patch($route, $handler, callable $callback = null, $middlewars = []);
+    public function head(
+        string $route,
+        callable|string $handler,
+        ?callable $callback = null,
+        array $middlewars = []
+    ): void;
 
     /**
-     * @param $route
-     * @param $handler
-     * @param callable|null $callback
-     * @param array $middlewars
-     * @return mixed
+     * @param string          $route
+     * @param string|callable $handler
+     * @param callable|null   $callback
+     * @param array<string>   $middlewars
+     *
+     * @return void
      */
-    public function head($route, $handler, callable $callback = null, $middlewars = []);
-
-    /**
-     * @param $route
-     * @param $handler
-     * @param callable|null $callback
-     * @param array $middlewars
-     * @return mixed
-     */
-    public function any($route, $handler, callable $callback = null, $middlewars = []);
+    public function any(
+        string $route,
+        callable|string $handler,
+        ?callable $callback = null,
+        array $middlewars = []
+    ): void;
 }

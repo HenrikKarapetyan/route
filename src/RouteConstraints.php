@@ -3,145 +3,137 @@
  * Created by PhpStorm.
  * User: Henrik
  * Date: 4/6/2018
- * Time: 10:40 AM
+ * Time: 10:40 AM.
  */
+declare(strict_types=1);
 
 namespace henrik\route;
 
-use henrik\route\exceptions\InvalidRangeException;
-
+use henrik\route\Exceptions\InvalidRangeException;
 
 /**
- * Class RouteConstraints
- * @package henrik\route
+ * Class RouteConstraints.
  */
 class RouteConstraints
 {
+    public const STRING_PATTERN          = '[a-zA-Z0-9]+';
+    public const STRING_PATTERN_BY_RANGE = '([a-zA-Z0-9]{%d,%d})';
+
+    public const INTEGER_PATTERN          = '[0-9]+';
+    public const INTEGER_PATTERN_BY_RANGE = '([0-9]{%d,%d})';
+
+    public const ANY_PATTERN          = '[^/]+';
+    public const ANY_PATTERN_BY_RANGE = '[^/]{%d,%d}';
+
+    public const SEGMENT_PATTERN = '(?<%s>%s)';
     /**
-     *
+     * @var array<string>|string $routeParts
      */
-    const string_pattern = '[a-zA-Z0-9]+';
+    private array|string $routeParts = [];
     /**
-     *
+     * @var array<string> $regularizedSegments
      */
-    const string_pattern_by_range = '([a-zA-Z0-9]{%d,%d})';
+    private array $regularizedSegments = [];
 
     /**
+     * @param array<string>|string $parts
      *
-     */
-    const integer_pattern = '[0-9]+';
-    /**
-     *
-     */
-    const integer_pattern_by_range = '([0-9]{%d,%d})';
-
-    /**
-     *
-     */
-    const any_pattern = '[^/]+';
-    /**
-     *
-     */
-    const any_pattern_by_range = '[^/]{%d,%d}';
-
-    /**
-     *
-     */
-    const segment_pattern = "(?<%s>%s)";
-    /**
-     * @temporal
-     * @var
-     */
-    private $route_parts;
-    /**
-     * @var array
-     */
-    private $regularized_segemnts = [];
-
-    /**
-     * @param $parts array|string
      * @return $this
      */
-    public function set($parts)
+    public function set(array|string $parts): self
     {
-        $this->route_parts = $parts;
+        $this->routeParts = $parts;
+
         return $this;
     }
 
     /**
      * @param int $from
      * @param int $to
+     *
      * @throws InvalidRangeException
      */
-    public function asInteger($from = 0, $to = 0)
+    public function asInteger(int $from = 0, int $to = 0): void
     {
+        $pattern = self::INTEGER_PATTERN_BY_RANGE;
+
         $this->isValidParams($from, $to);
-        if ($from === 0 && $to == 0)
-            $pattern = self::integer_pattern;
-        else $pattern = self::integer_pattern_by_range;
-        $this->regularizeSegments(sprintf($pattern, $from, $to));
-    }
 
-    /**
-     * @param int $from
-     * @param int $to
-     * @throws InvalidRangeException
-     */
-    public function any($from = 0, $to = 255)
-    {
-        $this->isValidParams($from, $to);
-        if ($from === 0 && $to == 0)
-            $pattern = self::any_pattern;
-        else $pattern = self::any_pattern_by_range;
-        $this->regularizeSegments(sprintf($pattern, $from, $to));
-    }
-
-    /**
-     * @param int $from
-     * @param int $to
-     * @throws InvalidRangeException
-     */
-    public function asString($from = 0, $to = 255)
-    {
-        $this->isValidParams($from, $to);
-        if ($from === 0 && $to == 0)
-            $pattern = self::string_pattern;
-        else $pattern = self::string_pattern_by_range;
-        $this->regularizeSegments(sprintf($pattern, $from, $to));
-
-    }
-
-    /**
-     * @param $pattern string
-     */
-    private function regularizeSegments($pattern)
-    {
-        if (is_array($this->route_parts)) {
-            foreach ($this->route_parts as $part) {
-                $this->regularized_segemnts[$part] = sprintf(self::segment_pattern, $part, $pattern);
-            }
-        } else {
-            $this->regularized_segemnts[$this->route_parts] = sprintf(self::segment_pattern, $this->route_parts, $pattern);
+        if ($from === 0 && $to == 0) {
+            $pattern = self::INTEGER_PATTERN;
         }
+
+        $this->regularizeSegments(sprintf($pattern, $from, $to));
     }
 
     /**
-     * @param $from
-     * @param $to
+     * @param int $from
+     * @param int $to
+     *
      * @throws InvalidRangeException
      */
-    private function isValidParams($from, $to)
+    public function any(int $from = 0, int $to = 255): void
+    {
+        $pattern = self::ANY_PATTERN_BY_RANGE;
+
+        $this->isValidParams($from, $to);
+
+        if ($from === 0 && $to == 0) {
+            $pattern = self::ANY_PATTERN;
+        }
+        $this->regularizeSegments(sprintf($pattern, $from, $to));
+    }
+
+    /**
+     * @param int $from
+     * @param int $to
+     *
+     * @throws InvalidRangeException
+     */
+    public function asString(int $from = 0, int $to = 255): void
+    {
+        $pattern = self::STRING_PATTERN_BY_RANGE;
+
+        $this->isValidParams($from, $to);
+
+        if ($from === 0 && $to == 0) {
+            $pattern = self::STRING_PATTERN;
+        }
+        $this->regularizeSegments(sprintf($pattern, $from, $to));
+
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getSegments(): array
+    {
+        return $this->regularizedSegments;
+    }
+
+    /**
+     * @param string $pattern
+     */
+    private function regularizeSegments(string $pattern): void
+    {
+        if (is_array($this->routeParts)) {
+            foreach ($this->routeParts as $part) {
+                $this->regularizedSegments[$part] = sprintf(self::SEGMENT_PATTERN, $part, $pattern);
+            }
+
+            return;
+        }
+        $this->regularizedSegments[$this->routeParts] = sprintf(self::SEGMENT_PATTERN, $this->routeParts, $pattern);
+    }
+
+    /**
+     * @param int $from
+     * @param int $to
+     */
+    private function isValidParams(int $from, int $to): void
     {
         if ($to < $from || $to < 0 || $from < 0) {
             throw new InvalidRangeException(sprintf('"%s" and "%s" should been integer instanced and unsigned', $from, $to));
         }
-    }
-
-    /**
-     * @return array
-     */
-    public function getSegments()
-    {
-        return $this->regularized_segemnts;
     }
 }

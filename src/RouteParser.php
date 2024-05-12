@@ -5,104 +5,96 @@
  * Email:  henrikkarapetyan@gmail.com
  * Country: Armenia
  * File created:  2019/9/8  3:54:42.
- *
  */
+declare(strict_types=1);
 
 namespace henrik\route;
 
-
 /**
- * Class RouteParser
- * @package henrik\route
+ * Class RouteParser.
  */
 class RouteParser
 {
-
     /**
-     * @var array
+     * @var array<string, mixed> $data
      */
-    private $data = [];
-    /**
-     * @var RouteConstraints
-     */
-    private $constraints = [];
-
-    /**
-     * @var
-     */
-    private $route;
-    /**
-     * @var
-     */
-    private $options;
+    private array $data = [];
 
     /**
      * RouteDataGenerator constructor.
-     * @param $route
-     * @param $options
-     * @param null $constraints
+     *
+     * @param string                $route
+     * @param array<string, mixed>  $options
+     * @param RouteConstraints|null $constraints
      */
-    public function __construct($route, $options, $constraints = null)
-    {
-        $this->route = $route;
-        $this->constraints = $constraints;
-        $this->options = $options;
-    }
-
+    public function __construct(
+        private readonly string $route,
+        private readonly array $options,
+        private ?RouteConstraints $constraints = null
+    ) {}
 
     /**
-     *
+     * @return array<string, mixed>
      */
-    public function parse()
+    public function parse(): array
     {
         if ($this->route !== '/') {
-            $route_parts_array = explode('/', ltrim($this->route, '/'));
-            $this->data = $this->parser($route_parts_array);
-        } else {
-            $this->data['/']['options'] = $this->options;
+            $routePartsArray = explode('/', ltrim($this->route, '/'));
+            $this->data      = $this->parser($routePartsArray);
+
+            return $this->data;
         }
+
+        $this->data['/']['options'] = $this->options; // @phpstan-ignore-line
+
         return $this->data;
     }
 
     /**
-     * @param $route_segments_array
-     * @param array $helper
-     * @return array
+     * @param RouteConstraints $constraints
      */
-    private function parser($route_segments_array, $helper = [])
+    public function setConstraints(RouteConstraints $constraints): void
     {
-        if (!empty($route_segments_array)) {
-            $index_data = array_shift($route_segments_array);
-            if (preg_match('#{(?<param>[\w]+)}#', $index_data, $matches)) {
+        $this->constraints = $constraints;
+    }
+
+    /**
+     * @param array<string>         $routeSegmentsArray
+     * @param array<string, string> $helper
+     *
+     * @return array<string, array<mixed>|string>
+     */
+    private function parser(array $routeSegmentsArray, array $helper = []): array
+    {
+        if (!empty($routeSegmentsArray)) {
+            $indexData = array_shift($routeSegmentsArray);
+            $part      = '/' . $indexData;
+
+            if (preg_match('#{(?<param>[\w]+)}#', $indexData, $matches)) {
                 $part = '/' . $this->getConstraints($matches['param']);
-            } else {
-                $part = '/' . $index_data;
             }
-            $helper[$part] = $this->parser($route_segments_array, $helper);
-        } else {
-            $helper['options'] = $this->options;
+
+            $helper[$part] = $this->parser($routeSegmentsArray, $helper);
+
+            return $helper;
         }
+
+        $helper['options'] = $this->options;
 
         return $helper;
     }
 
     /**
-     * @param $param
-     * @return array
+     * @param string $param
+     *
+     * @return string
      */
-    private function getConstraints($param)
+    private function getConstraints(string $param): string
     {
-        if (!is_null($this->constraints) && isset($this->constraints->getSegments()[$param]))
+        if (!is_null($this->constraints) && isset($this->constraints->getSegments()[$param])) {
             return $this->constraints->getSegments()[$param];
-        else
-            return sprintf(RouteConstraints::segment_pattern, $param, RouteConstraints::any_pattern);
-    }
+        }
 
-    /**
-     * @param array $constraints
-     */
-    public function setConstraints($constraints = [])
-    {
-        $this->constraints = $constraints;
+        return sprintf(RouteConstraints::SEGMENT_PATTERN, $param, RouteConstraints::ANY_PATTERN);
     }
 }

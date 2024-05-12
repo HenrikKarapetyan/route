@@ -5,18 +5,14 @@
  * Email:  henrikkarapetyan@gmail.com
  * Country: Armenia
  * File created:  2019/9/8  4:46:30.
- *
  */
+declare(strict_types=1);
 
+namespace henrik\route\Exceptions;
 
-namespace henrik\route\exceptions;
-
+use RuntimeException;
 
 /**
- * Class RouteException
- * @package henrik\route\exceptions
+ * Class RouteException.
  */
-class RouteException extends \RuntimeException
-{
-
-}
+class RouteException extends RuntimeException {}

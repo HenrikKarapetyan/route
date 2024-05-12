@@ -3,17 +3,18 @@
  * Created by PhpStorm.
  * User: Henrik
  * Date: 2/8/2018
- * Time: 11:12 AM
+ * Time: 11:12 AM.
  */
 
-namespace henrik\route\exceptions;
+declare(strict_types=1);
 
+namespace henrik\route\Exceptions;
 
 use Throwable;
 
 class BadRequestException extends RouteException
 {
-    public function __construct($message = "", $code = 0, Throwable $previous = null)
+    public function __construct(string $message = '', int $code = 0, ?Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

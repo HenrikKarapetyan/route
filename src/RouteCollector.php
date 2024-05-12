@@ -3,80 +3,87 @@
  * Created by PhpStorm.
  * User: Henrik
  * Date: 4/6/2018
- * Time: 10:39 AM
+ * Time: 10:39 AM.
  */
+declare(strict_types=1);
 
 namespace henrik\route;
 
-
 /**
- * Class RouteCollector
- * @package henrik\route
+ * Class RouteCollector.
  */
 class RouteCollector extends AbstractRouteCollector
 {
     /**
-     * @var array
+     * @var array<mixed>
      */
-    private static $routes = [];
+    private static array $routes = [];
     /**
-     * @var string
+     * @var ?string
      */
-    private $group_name;
+    private ?string $groupName = null;
 
     /**
-     * @param $methods
-     * @param $route
-     * @param $handler
-     * @param callable|null $callback
+     * {@inheritdoc}
      */
-    public function add($methods, $route, $handler, callable $callback = null, $middlewars = [])
-    {
-        $route = $this->group_name . $route;
+    public function add(
+        array $methods,
+        string $route,
+        callable|string $handler,
+        ?callable $callback = null,
+        array $middlewars = []
+    ): void {
+        $route       = $this->groupName . $route;
         $constraints = null;
+
         if (!is_null($callback) && is_callable($callback)) {
             $constraints = new RouteConstraints();
             $callback($constraints);
         }
+
         $options = [
-            'method' => $methods,
-            'handler' => $handler,
-            'middlewars' => $middlewars
+            'method'     => $methods,
+            'handler'    => $handler,
+            'middlewars' => $middlewars,
         ];
-        $rp = new RouteParser($route, $options, $constraints);
-        $route_parsed_data = $rp->parse();
+
+        $rp              = new RouteParser($route, $options, $constraints);
+        $routeParsedData = $rp->parse();
+
         if (!empty(self::$routes)) {
-            self::$routes = array_merge_recursive($route_parsed_data, self::$routes);
-        } else {
-            self::$routes = $route_parsed_data;
+            self::$routes = array_merge_recursive($routeParsedData, self::$routes);
+
+            return;
         }
+
+        self::$routes = $routeParsedData;
+
     }
 
     /**
      * @return string
      */
-    public function getGroupName()
+    public function getGroupName(): string
     {
-        if (is_null($this->group_name)) {
-            $this->group_name = '';
-        }
-        return $this->group_name;
+        return !is_null($this->groupName) ? $this->groupName : '';
     }
 
     /**
-     * @param string $group_name
+     * @param string $groupName
+     *
      * @return RouteCollector
      */
-    public function setGroupName($group_name)
+    public function setGroupName(string $groupName): self
     {
-        $this->group_name = $group_name;
+        $this->groupName = $groupName;
+
         return $this;
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
-    public function getRoutes()
+    public function getRoutes(): array
     {
         return self::$routes;
     }
