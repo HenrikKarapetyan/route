@@ -2,7 +2,7 @@
 
 namespace henrik\route;
 
-use henrik\route\interfaces\RouteInterface;
+use henrik\route\Interfaces\RouteInterface;
 
 class RouteFinder extends RouteCollector
 {
@@ -31,6 +31,7 @@ class RouteFinder extends RouteCollector
 
             return $this->routeFinder($routes, $uriSegments, $routeParams);
         }
+
         if (isset($uriSegments[0])) {
 
             $matches = [];
@@ -38,13 +39,16 @@ class RouteFinder extends RouteCollector
 
                 if (isset($index[1]) && $index[1] === '(') {
                     $pattern = '#' . $index . '$#xis';
+
                     if (preg_match($pattern, $uriSegments[0], $matches)) {
                         $routes = $routesArray;
+
                         foreach ($matches as $key => $value) {
                             if (is_string($key)) {
                                 $routeParams[$key] = $value;
                             }
                         }
+
                         array_shift($uriSegments);
 
                         break;
@@ -64,12 +68,8 @@ class RouteFinder extends RouteCollector
         }
 
         $route = new Route();
-        $route->setHttpMethod($routes['options']['method']);
-        $route->setHandler($routes['options']['handler']);
-        $route->setMiddlewars($routes['options']['middlewars']);
-        foreach ($routeParams as $key => $value) {
-            $route->setParam($key, $value);
-        }
+        $route->setRouteOptions($routes[RouteGraphBuilder::ROUTE_OPTIONS_KEY]);
+        $route->setParams($routeParams);
 
         return $route;
     }

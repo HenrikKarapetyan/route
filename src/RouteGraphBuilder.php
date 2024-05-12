@@ -13,8 +13,9 @@ namespace henrik\route;
 /**
  * Class RouteParser.
  */
-class RouteParser
+class RouteGraphBuilder
 {
+    public const ROUTE_OPTIONS_KEY = 'options';
     /**
      * @var array<string, mixed> $data
      */
@@ -24,19 +25,19 @@ class RouteParser
      * RouteDataGenerator constructor.
      *
      * @param string                $route
-     * @param array<string, mixed>  $options
+     * @param RouteOptions          $options
      * @param RouteConstraints|null $constraints
      */
     public function __construct(
         private readonly string $route,
-        private readonly array $options,
+        private readonly RouteOptions $options,
         private ?RouteConstraints $constraints = null
     ) {}
 
     /**
      * @return array<string, mixed>
      */
-    public function parse(): array
+    public function build(): array
     {
         if ($this->route !== '/') {
             $routePartsArray = explode('/', ltrim($this->route, '/'));
@@ -45,7 +46,7 @@ class RouteParser
             return $this->data;
         }
 
-        $this->data['/']['options'] = $this->options; // @phpstan-ignore-line
+        $this->data['/'][self::ROUTE_OPTIONS_KEY] = $this->options; // @phpstan-ignore-line
 
         return $this->data;
     }
@@ -59,29 +60,29 @@ class RouteParser
     }
 
     /**
-     * @param array<string>         $routeSegmentsArray
-     * @param array<string, string> $helper
+     * @param array<string>                      $routeSegmentsArray
+     * @param array<string, string|RouteOptions> $graph
      *
-     * @return array<string, array<mixed>|string>
+     * @return array<string, array<int|string, RouteOptions>|string>
      */
-    private function parser(array $routeSegmentsArray, array $helper = []): array
+    private function parser(array $routeSegmentsArray, array $graph = []): array
     {
         if (!empty($routeSegmentsArray)) {
             $indexData = array_shift($routeSegmentsArray);
-            $part      = '/' . $indexData;
+            $graphNode = '/' . $indexData;
 
             if (preg_match('#{(?<param>[\w]+)}#', $indexData, $matches)) {
-                $part = '/' . $this->getConstraints($matches['param']);
+                $graphNode = '/' . $this->getConstraints($matches['param']);
             }
 
-            $helper[$part] = $this->parser($routeSegmentsArray, $helper);
+            $graph[$graphNode] = $this->parser($routeSegmentsArray, $graph);
 
-            return $helper;
+            return $graph;
         }
 
-        $helper['options'] = $this->options;
+        $graph[self::ROUTE_OPTIONS_KEY] = $this->options;
 
-        return $helper;
+        return $graph;
     }
 
     /**

@@ -16,125 +16,123 @@ abstract class AbstractRouteCollector
 {
     /**
      * @param array<string>   $methods
-     * @param string          $route
+     * @param string          $path
      * @param string|callable $handler
-     * @param callable|null   $callback
+     * @param callable|null   $constraints
      * @param array<string>   $middlewars
      *
      * @return void
      */
     abstract public function add(
         array $methods,
-        string $route,
+        string $path,
         callable|string $handler,
-        ?callable $callback = null,
+        ?callable $constraints = null,
         array $middlewars = []
     ): void;
 
-    // ** REQUEST METHODS *//
-
     /**
-     * @param string          $route
+     * @param string          $path
      * @param string|callable $handler
-     * @param callable|null   $callback
+     * @param callable|null   $constraints
      * @param array<string>   $middlewars
      */
     public function get(
-        string $route,
+        string $path,
         callable|string $handler,
-        ?callable $callback = null,
+        ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['GET'], $route, $handler, $callback, $middlewars);
+        $this->add(['GET'], $path, $handler, $constraints, $middlewars);
     }
 
     /**
-     * @param string          $route
+     * @param string          $path
      * @param string|callable $handler
-     * @param callable|null   $callback
+     * @param callable|null   $constraints
      * @param array<string>   $middlewars
      */
     public function post(
-        string $route,
+        string $path,
         callable|string $handler,
-        ?callable $callback = null,
+        ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['POST'], $route, $handler, $callback, $middlewars);
+        $this->add(['POST'], $path, $handler, $constraints, $middlewars);
     }
 
     /**
-     * @param string          $route
+     * @param string          $path
      * @param string|callable $handler
-     * @param callable|null   $callback
+     * @param callable|null   $constraints
      * @param array<string>   $middlewars
      */
     public function put(
-        string $route,
+        string $path,
         callable|string $handler,
-        ?callable $callback = null,
+        ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['PUT'], $route, $handler, $callback, $middlewars);
+        $this->add(['PUT'], $path, $handler, $constraints, $middlewars);
     }
 
     /**
-     * @param string          $route
+     * @param string          $path
      * @param callable|string $handler
-     * @param callable|null   $callback
+     * @param callable|null   $constraints
      * @param array<string>   $middlewars
      */
     public function delete(
-        string $route,
+        string $path,
         callable|string $handler,
-        ?callable $callback = null,
+        ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['DELETE'], $route, $handler, $callback, $middlewars);
+        $this->add(['DELETE'], $path, $handler, $constraints, $middlewars);
     }
 
     /**
-     * @param string          $route
+     * @param string          $path
      * @param callable|string $handler
-     * @param callable|null   $callback
+     * @param callable|null   $constraints
      * @param array<string>   $middlewars
      */
     public function patch(
-        string $route,
+        string $path,
         callable|string $handler,
-        ?callable $callback = null,
+        ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['PATCH'], $route, $handler, $callback, $middlewars);
+        $this->add(['PATCH'], $path, $handler, $constraints, $middlewars);
     }
 
     /**
-     * @param string          $route
+     * @param string          $path
      * @param string|callable $handler
-     * @param callable|null   $callback
+     * @param callable|null   $constraints
      * @param array<string>   $middlewars
      */
     public function head(
-        string $route,
+        string $path,
         callable|string $handler,
-        ?callable $callback = null,
+        ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['HEAD'], $route, $handler, $callback, $middlewars);
+        $this->add(['HEAD'], $path, $handler, $constraints, $middlewars);
     }
 
     /**
-     * @param string          $route
+     * @param string          $path
      * @param string|callable $handler
-     * @param callable|null   $callback
+     * @param callable|null   $constraints
      * @param array<string>   $middlewars
      */
     public function any(
-        string $route,
+        string $path,
         callable|string $handler,
-        ?callable $callback = null,
+        ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $this->add(['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH'], $route, $handler, $callback, $middlewars);
+        $this->add(['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH'], $path, $handler, $constraints, $middlewars);
     }
 }

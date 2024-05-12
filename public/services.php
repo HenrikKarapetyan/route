@@ -1,6 +1,6 @@
 <?php
 
-use henrik\route\interfaces\RouteCollectorInterface;
+use henrik\route\Interfaces\RouteCollectorInterface;
 use henrik\route\RouteCollector;
 use henrik\route\RouteDispatcher;
 use henrik\sl\ServiceScope;

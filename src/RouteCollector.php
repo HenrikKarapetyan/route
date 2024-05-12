@@ -28,27 +28,23 @@ class RouteCollector extends AbstractRouteCollector
      */
     public function add(
         array $methods,
-        string $route,
+        string $path,
         callable|string $handler,
-        ?callable $callback = null,
+        ?callable $constraints = null,
         array $middlewars = []
     ): void {
-        $route       = $this->groupName . $route;
-        $constraints = null;
+        $route      = $this->groupName . $path;
+        $constraint = null;
 
-        if (!is_null($callback) && is_callable($callback)) {
-            $constraints = new RouteConstraints();
-            $callback($constraints);
+        if (!is_null($constraints) && is_callable($constraints)) {
+            $constraint = new RouteConstraints();
+            $constraints($constraint);
         }
 
-        $options = [
-            'method'     => $methods,
-            'handler'    => $handler,
-            'middlewars' => $middlewars,
-        ];
+        $options = new RouteOptions($methods, $handler, $middlewars);
 
-        $rp              = new RouteParser($route, $options, $constraints);
-        $routeParsedData = $rp->parse();
+        $rp              = new RouteGraphBuilder($route, $options, $constraint);
+        $routeParsedData = $rp->build();
 
         if (!empty(self::$routes)) {
             self::$routes = array_merge_recursive($routeParsedData, self::$routes);

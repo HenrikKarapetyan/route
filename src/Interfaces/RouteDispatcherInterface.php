@@ -7,7 +7,7 @@
  */
 declare(strict_types=1);
 
-namespace henrik\route\interfaces;
+namespace henrik\route\Interfaces;
 
 /**
  * Interface RouteDispatcherInterface.
