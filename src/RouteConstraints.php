@@ -92,7 +92,7 @@ class RouteConstraints
 
         $this->isValidParams($from, $to);
 
-        if ($from === 0 && $to === 0) {
+        if ($from && $to) {
             $pattern = self::STRING_PATTERN_BY_RANGE;
         }
 

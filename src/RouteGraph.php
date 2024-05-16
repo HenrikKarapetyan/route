@@ -39,6 +39,7 @@ class RouteGraph implements RouteGraphInterface
         if ($groupName) {
             $route = $groupName . $path;
         }
+
         $constraint = null;
 
         if (!is_null($constraints) && is_callable($constraints)) {
