@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace henrik\route;
 
 use henrik\route\Interfaces\RouteGraphInterface;
+use henrik\route\Utils\RouteGraphBuilder;
+use henrik\route\Utils\RouteOptions;
 
 /**
  * Class RouteCollector.
@@ -28,11 +30,12 @@ class RouteGraph implements RouteGraphInterface
         array $methods,
         string $path,
         callable|string $handler,
-        ?callable $constraints = null,
+        null|array|callable $constraints = null,
         array $middlewars = [],
         ?string $groupName = null
     ): void {
         $route = $path;
+
         if ($groupName) {
             $route = $groupName . $path;
         }
@@ -41,6 +44,10 @@ class RouteGraph implements RouteGraphInterface
         if (!is_null($constraints) && is_callable($constraints)) {
             $constraint = new RouteConstraints();
             $constraints($constraint);
+        }
+
+        if (is_array($constraints)) {
+            $constraint = (new RouteConstraints())->buildFromArray($constraints);
         }
 
         $options           = new RouteOptions($methods, $handler, $middlewars);

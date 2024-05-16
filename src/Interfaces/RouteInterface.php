@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace henrik\route\Interfaces;
 
-use henrik\route\RouteOptions;
+use henrik\route\Utils\RouteOptions;
 
 interface RouteInterface
 {

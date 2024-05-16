@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace henrik\route;
 
 use henrik\route\Exceptions\InvalidRangeException;
+use henrik\route\Exceptions\UnsupportedRouteTypeParamException;
+use henrik\route\Utils\RouteParamType;
 
 /**
  * Class RouteConstraints.
@@ -48,59 +50,53 @@ class RouteConstraints
     }
 
     /**
-     * @param int $from
-     * @param int $to
-     *
-     * @throws InvalidRangeException
+     * @param int|null $from
+     * @param int|null $to
      */
-    public function asInteger(int $from = 0, int $to = 0): void
+    public function asInteger(?int $from = null, ?int $to = null): void
     {
-        $pattern = self::INTEGER_PATTERN_BY_RANGE;
+        $pattern = self::INTEGER_PATTERN;
 
         $this->isValidParams($from, $to);
 
-        if ($from === 0 && $to == 0) {
-            $pattern = self::INTEGER_PATTERN;
+        if ($from && $to) {
+            $pattern = self::INTEGER_PATTERN_BY_RANGE;
         }
 
         $this->regularizeSegments(sprintf($pattern, $from, $to));
     }
 
     /**
-     * @param int $from
-     * @param int $to
-     *
-     * @throws InvalidRangeException
+     * @param int|null $from
+     * @param int|null $to
      */
-    public function any(int $from = 0, int $to = 255): void
+    public function any(?int $from = null, ?int $to = null): void
     {
-        $pattern = self::ANY_PATTERN_BY_RANGE;
+        $pattern = self::ANY_PATTERN;
 
         $this->isValidParams($from, $to);
 
-        if ($from === 0 && $to == 0) {
-            $pattern = self::ANY_PATTERN;
+        if ($from && $to) {
+            $pattern = self::ANY_PATTERN_BY_RANGE;
         }
         $this->regularizeSegments(sprintf($pattern, $from, $to));
     }
 
     /**
-     * @param int $from
-     * @param int $to
-     *
-     * @throws InvalidRangeException
+     * @param int|null $from
+     * @param int|null $to
      */
-    public function asString(int $from = 0, int $to = 255): void
+    public function asString(?int $from = null, ?int $to = null): void
     {
-        $pattern = self::STRING_PATTERN_BY_RANGE;
+        $pattern = self::STRING_PATTERN;
 
         $this->isValidParams($from, $to);
 
-        if ($from === 0 && $to == 0) {
-            $pattern = self::STRING_PATTERN;
+        if ($from === 0 && $to === 0) {
+            $pattern = self::STRING_PATTERN_BY_RANGE;
         }
-        $this->regularizeSegments(sprintf($pattern, $from, $to));
 
+        $this->regularizeSegments(sprintf($pattern, $from, $to));
     }
 
     /**
@@ -109,6 +105,42 @@ class RouteConstraints
     public function getSegments(): array
     {
         return $this->regularizedSegments;
+    }
+
+    /**
+     * @param array<string, array<string, string|int|RouteParamType|null>> $constraints
+     *
+     * @return $this
+     */
+    public function buildFromArray(array $constraints): self
+    {
+        foreach ($constraints as $routeParam => $options) {
+
+            if (is_array($options)) {
+
+                if (isset($options['type'])) {
+                    /**
+                     * @var RouteParamType $type
+                     */
+                    $type = $options['type'];
+
+                    /**
+                     * @var ?int $from
+                     */
+                    $from = $options['from'] ?? null;
+                    /**
+                     * @var ?int $to
+                     */
+                    $to = $options['to'] ?? null;
+
+                    $this->detectAndSetOptions(routeParam: $routeParam, type: $type, from: $from, to: $to);
+                }
+
+            }
+
+        }
+
+        return $this;
     }
 
     /**
@@ -127,13 +159,40 @@ class RouteConstraints
     }
 
     /**
-     * @param int $from
-     * @param int $to
+     * @param int|null $from
+     * @param int|null $to
      */
-    private function isValidParams(int $from, int $to): void
+    private function isValidParams(?int $from, ?int $to): void
     {
-        if ($to < $from || $to < 0 || $from < 0) {
-            throw new InvalidRangeException(sprintf('"%s" and "%s" should been integer instanced and unsigned', $from, $to));
+        if ($from && $to) {
+            if ($to < $from || $to < 0 || $from < 0) {
+                throw new InvalidRangeException(sprintf('"%s" and "%s" should been integer instanced and unsigned', $from, $to));
+            }
+        }
+    }
+
+    /**
+     * @param string         $routeParam
+     * @param RouteParamType $type
+     * @param int|null       $from
+     * @param int|null       $to
+     *
+     * @return void
+     */
+    private function detectAndSetOptions(string $routeParam, RouteParamType $type, ?int $from = null, ?int $to = null): void
+    {
+        switch ($type) {
+            case RouteParamType::TYPE_STRING:
+                $this->set([$routeParam])->asString($from, $to);
+
+                break;
+
+            case RouteParamType::TYPE_INTEGER:
+                $this->set([$routeParam])->asInteger($from, $to);
+
+                break;
+
+            default: throw new UnsupportedRouteTypeParamException(sprintf('Unsupported `%s` route type', $type->value));
         }
     }
 }

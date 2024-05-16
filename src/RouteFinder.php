@@ -6,6 +6,7 @@ namespace henrik\route;
 
 use henrik\route\Interfaces\RouteFinderInterface;
 use henrik\route\Interfaces\RouteInterface;
+use henrik\route\Utils\RouteGraphBuilder;
 
 readonly class RouteFinder implements RouteFinderInterface
 {

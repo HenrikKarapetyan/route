@@ -53,6 +53,7 @@ readonly class RouteDispatcher
         if (!empty($queryParams)) {
             $values                  = array_values($queryParams);
             $uriQueryParamsAsUrlPart = implode('/', $values);
+
             if ($uri[-1] === '/') {
                 return $uri . $uriQueryParamsAsUrlPart . '/';
             }

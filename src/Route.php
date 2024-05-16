@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace henrik\route;
 
+use henrik\route\Utils\RouteGraphItemBuilder;
+
 /**
  * Class RouteContainer.
  */

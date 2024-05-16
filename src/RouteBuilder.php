@@ -3,11 +3,12 @@
 namespace henrik\route;
 
 use henrik\route\Exceptions\UnknownKeywordException;
-use henrik\route\RouteConstraints\AnyValueTypeConstraint;
-use henrik\route\RouteConstraints\FloatValueTypeConstraint;
-use henrik\route\RouteConstraints\IntegerValueTypeConstraint;
-use henrik\route\RouteConstraints\RouteConstraintInterface;
-use henrik\route\RouteConstraints\StringValueTypeConstraint;
+use henrik\route\Interfaces\RouteBuilderConstraintInterface;
+use henrik\route\Interfaces\RouteBuilderInterface;
+use henrik\route\RouteBuilderConstraints\AnyValueTypeConstraint;
+use henrik\route\RouteBuilderConstraints\FloatValueTypeConstraint;
+use henrik\route\RouteBuilderConstraints\IntegerValueTypeConstraint;
+use henrik\route\RouteBuilderConstraints\StringValueTypeConstraint;
 
 class RouteBuilder implements RouteBuilderInterface
 {
@@ -119,9 +120,9 @@ class RouteBuilder implements RouteBuilderInterface
      *
      * @throws UnknownKeywordException
      *
-     * @return RouteConstraintInterface
+     * @return RouteBuilderConstraintInterface
      */
-    private function getNormalizedValue(string $key, null|bool|float|int|string $value): RouteConstraintInterface
+    private function getNormalizedValue(string $key, null|bool|float|int|string $value): RouteBuilderConstraintInterface
     {
         return match ($key) {
             '?'     => new AnyValueTypeConstraint($value),

@@ -7,12 +7,12 @@ namespace henrik\route\Interfaces;
 interface RouteGraphInterface
 {
     /**
-     * @param array<string>   $methods
-     * @param string          $path
-     * @param string|callable $handler
-     * @param callable|null   $constraints
-     * @param array<string>   $middlewars
-     * @param string|null     $groupName
+     * @param array<string>                                                            $methods
+     * @param string                                                                   $path
+     * @param string|callable                                                          $handler
+     * @param callable|array<string, string|array<string, array<string, string>>>|null $constraints
+     * @param array<string>                                                            $middlewars
+     * @param string|null                                                              $groupName
      *
      * @return void
      */
@@ -20,7 +20,7 @@ interface RouteGraphInterface
         array $methods,
         string $path,
         callable|string $handler,
-        ?callable $constraints = null,
+        null|array|callable $constraints = null,
         array $middlewars = [],
         ?string $groupName = null
     ): void;
