@@ -5,21 +5,19 @@ declare(strict_types=1);
 namespace henrik\route;
 
 use henrik\route\Exceptions\UrlNotFoundException;
+use henrik\route\Interfaces\RouteDispatcherInterface;
 use henrik\route\Interfaces\RouteFinderInterface;
 use henrik\route\Interfaces\RouteInterface;
 
 /**
  * Class RouteDispatcher.
  */
-readonly class RouteDispatcher
+readonly class RouteDispatcher implements RouteDispatcherInterface
 {
     public function __construct(private RouteFinderInterface $routeFinder) {}
 
     /**
-     * @param string|null               $uri
-     * @param array<string, int|string> $queryParams
-     *
-     * @return RouteInterface
+     *{@inheritDoc}
      */
     public function dispatch(?string $uri = null, array $queryParams = []): RouteInterface
     {

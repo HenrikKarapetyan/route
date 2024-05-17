@@ -15,7 +15,10 @@ namespace henrik\route\Interfaces;
 interface RouteDispatcherInterface
 {
     /**
-     * @return mixed
+     * @param string|null               $uri
+     * @param array<string, int|string> $queryParams
+     *
+     * @return RouteInterface
      */
-    public function dispatch(): mixed;
+    public function dispatch(?string $uri = null, array $queryParams = []): RouteInterface;
 }
