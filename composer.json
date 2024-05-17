@@ -12,7 +12,8 @@
   ],
   "require": {
     "php": ">=8.2",
-    "henrik/container": "^2.0"
+    "henrik/container": "^2.0",
+    "henrik/contracts": "dev-main"
   },
   "autoload": {
     "psr-4": {
