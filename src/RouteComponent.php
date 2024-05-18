@@ -6,9 +6,9 @@ namespace henrik\route;
 
 use henrik\route\Subscribers\RequestHandlerSubscriber;
 use henrik\route\Subscribers\RoutesParserSubscriber;
-use Hk\Contracts\ComponentInterface;
+use Hk\Contracts\BaseComponent;
 
-class RouteComponent implements ComponentInterface
+class RouteComponent extends BaseComponent
 {
     /**
      * {@inheritDoc}
@@ -16,21 +16,6 @@ class RouteComponent implements ComponentInterface
     public function getServices(): array
     {
         return require 'config/services.php';
-    }
-
-    public function getControllersPath(): string
-    {
-        return '';
-    }
-
-    public function getTemplatesPath(): string
-    {
-        return '';
-    }
-
-    public function dependsOn(): array
-    {
-        return [];
     }
 
     public function getEventSubscribers(): array
