@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace henrik\route\Attributes;
+namespace Henrik\Route\Attributes;
 
 use Attribute;
-use henrik\route\Utils\RouteParamType;
+use Henrik\Route\Utils\RouteParamType;
 
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
 class Route

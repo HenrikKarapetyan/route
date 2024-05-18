@@ -7,11 +7,11 @@
  */
 declare(strict_types=1);
 
-namespace henrik\route;
+namespace Henrik\Route;
 
-use henrik\route\Exceptions\InvalidRangeException;
-use henrik\route\Exceptions\UnsupportedRouteTypeParamException;
-use henrik\route\Utils\RouteParamType;
+use Henrik\Route\Exceptions\InvalidRangeException;
+use Henrik\Route\Exceptions\UnsupportedRouteTypeParamException;
+use Henrik\Route\Utils\RouteParamType;
 
 /**
  * Class RouteConstraints.

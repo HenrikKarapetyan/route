@@ -1,9 +1,9 @@
 <?php
 
-namespace henrik\route\Subscribers;
+namespace Henrik\Route\Subscribers;
 
-use henrik\route\Attributes\Route;
-use henrik\route\RouteGraph;
+use Henrik\Route\Attributes\Route;
+use Henrik\Route\RouteGraph;
 
 use Hk\Contracts\AttributeParser\AbstractAttributeParser;
 use Hk\Contracts\DetectedClassesEvent;

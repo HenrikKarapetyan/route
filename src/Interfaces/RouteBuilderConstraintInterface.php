@@ -1,6 +1,6 @@
 <?php
 
-namespace henrik\route\Interfaces;
+namespace Henrik\Route\Interfaces;
 
 interface RouteBuilderConstraintInterface
 {

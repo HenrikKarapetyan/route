@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace henrik\route;
+namespace Henrik\Route;
 
-use henrik\route\Subscribers\RequestHandlerSubscriber;
-use henrik\route\Subscribers\RoutesParserSubscriber;
+use Henrik\Route\Subscribers\RequestHandlerSubscriber;
+use Henrik\Route\Subscribers\RoutesParserSubscriber;
 use Hk\Contracts\BaseComponent;
 
 class RouteComponent extends BaseComponent

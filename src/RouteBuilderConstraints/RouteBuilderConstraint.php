@@ -1,8 +1,8 @@
 <?php
 
-namespace henrik\route\RouteBuilderConstraints;
+namespace Henrik\Route\RouteBuilderConstraints;
 
-use henrik\route\Interfaces\RouteBuilderConstraintInterface;
+use Henrik\Route\Interfaces\RouteBuilderConstraintInterface;
 
 abstract class RouteBuilderConstraint implements RouteBuilderConstraintInterface
 {

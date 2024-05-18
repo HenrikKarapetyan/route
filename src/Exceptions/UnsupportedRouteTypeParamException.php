@@ -1,5 +1,5 @@
 <?php
 
-namespace henrik\route\Exceptions;
+namespace Henrik\Route\Exceptions;
 
 class UnsupportedRouteTypeParamException extends RouteException {}

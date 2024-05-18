@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace henrik\route\Utils;
+namespace Henrik\Route\Utils;
 
-use henrik\route\RouteGraph;
+use Henrik\Route\RouteGraph;
 
 class RouteGraphItemBuilder
 {

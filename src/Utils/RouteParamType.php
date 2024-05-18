@@ -1,6 +1,6 @@
 <?php
 
-namespace henrik\route\Utils;
+namespace Henrik\Route\Utils;
 
 enum RouteParamType: string
 {

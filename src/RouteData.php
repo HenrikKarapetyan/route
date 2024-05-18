@@ -7,10 +7,10 @@
  */
 declare(strict_types=1);
 
-namespace henrik\route;
+namespace Henrik\Route;
 
-use henrik\route\Interfaces\RouteInterface;
-use henrik\route\Utils\RouteOptions;
+use Henrik\Route\Interfaces\RouteInterface;
+use Henrik\Route\Utils\RouteOptions;
 
 /**
  * Class RouteData.

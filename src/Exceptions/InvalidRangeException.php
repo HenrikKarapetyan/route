@@ -7,6 +7,6 @@
  */
 declare(strict_types=1);
 
-namespace henrik\route\Exceptions;
+namespace Henrik\Route\Exceptions;
 
 class InvalidRangeException extends RouteException {}

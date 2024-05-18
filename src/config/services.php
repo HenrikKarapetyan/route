@@ -1,11 +1,11 @@
 <?php
 
-use henrik\route\Interfaces\RouteDispatcherInterface;
-use henrik\route\Interfaces\RouteFinderInterface;
-use henrik\route\RouteDispatcher;
-use henrik\route\RouteFinder;
-use henrik\route\RouteGraph;
-use henrik\route\Subscribers\RoutesParserSubscriber;
+use Henrik\Route\Interfaces\RouteDispatcherInterface;
+use Henrik\Route\Interfaces\RouteFinderInterface;
+use Henrik\Route\RouteDispatcher;
+use Henrik\Route\RouteFinder;
+use Henrik\Route\RouteGraph;
+use Henrik\Route\Subscribers\RoutesParserSubscriber;
 use Hk\Contracts\Enums\ServiceScope;
 
 return [

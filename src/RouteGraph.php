@@ -7,11 +7,11 @@
  */
 declare(strict_types=1);
 
-namespace henrik\route;
+namespace Henrik\Route;
 
-use henrik\route\Interfaces\RouteGraphInterface;
-use henrik\route\Utils\RouteGraphBuilder;
-use henrik\route\Utils\RouteOptions;
+use Henrik\Route\Interfaces\RouteGraphInterface;
+use Henrik\Route\Utils\RouteGraphBuilder;
+use Henrik\Route\Utils\RouteOptions;
 
 /**
  * Class RouteCollector.

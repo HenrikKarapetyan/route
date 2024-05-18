@@ -8,9 +8,9 @@
  */
 declare(strict_types=1);
 
-namespace henrik\route;
+namespace Henrik\Route;
 
-use henrik\route\Utils\RouteGraphItemBuilder;
+use Henrik\Route\Utils\RouteGraphItemBuilder;
 
 /**
  * Class RouteContainer.

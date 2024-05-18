@@ -1,8 +1,8 @@
 <?php
 
-namespace henrik\route\RouteBuilderConstraints;
+namespace Henrik\Route\RouteBuilderConstraints;
 
-use henrik\route\Exceptions\UnsatisfiedParameterTypeException;
+use Henrik\Route\Exceptions\UnsatisfiedParameterTypeException;
 
 class FloatValueTypeConstraint extends RouteBuilderConstraint
 {

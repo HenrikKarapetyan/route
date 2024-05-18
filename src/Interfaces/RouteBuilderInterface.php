@@ -1,8 +1,8 @@
 <?php
 
-namespace henrik\route\Interfaces;
+namespace Henrik\Route\Interfaces;
 
-use henrik\route\Exceptions\UnknownKeywordException;
+use Henrik\Route\Exceptions\UnknownKeywordException;
 
 interface RouteBuilderInterface
 {

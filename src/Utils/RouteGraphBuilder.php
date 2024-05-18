@@ -8,9 +8,9 @@
  */
 declare(strict_types=1);
 
-namespace henrik\route\Utils;
+namespace Henrik\Route\Utils;
 
-use henrik\route\RouteConstraints;
+use Henrik\Route\RouteConstraints;
 
 /**
  * Class RouteGraphBuilder.

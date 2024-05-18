@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace henrik\route\Interfaces;
+namespace Henrik\Route\Interfaces;
 
-use henrik\route\Utils\RouteOptions;
+use Henrik\Route\Utils\RouteOptions;
 
 interface RouteInterface
 {

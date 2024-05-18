@@ -1,6 +1,6 @@
 <?php
 
-namespace henrik\route\RouteBuilderConstraints;
+namespace Henrik\Route\RouteBuilderConstraints;
 
 class StringValueTypeConstraint extends RouteBuilderConstraint
 {

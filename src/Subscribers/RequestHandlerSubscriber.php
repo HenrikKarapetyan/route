@@ -1,8 +1,8 @@
 <?php
 
-namespace henrik\route\Subscribers;
+namespace Henrik\Route\Subscribers;
 
-use henrik\route\Interfaces\RouteDispatcherInterface;
+use Henrik\Route\Interfaces\RouteDispatcherInterface;
 use Hk\Contracts\CoreEvents;
 use Hk\Contracts\DependencyInjectorInterface;
 use Hk\Contracts\EventSubscriberInterface;

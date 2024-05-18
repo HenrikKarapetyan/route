@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace henrik\route;
+namespace Henrik\Route;
 
-use henrik\route\Interfaces\RouteFinderInterface;
-use henrik\route\Interfaces\RouteInterface;
-use henrik\route\Utils\RouteGraphBuilder;
+use Henrik\Route\Interfaces\RouteFinderInterface;
+use Henrik\Route\Interfaces\RouteInterface;
+use Henrik\Route\Utils\RouteGraphBuilder;
 
 readonly class RouteFinder implements RouteFinderInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace henrik\route\Attributes;
+namespace Henrik\Route\Attributes;
 
 use Attribute;
 

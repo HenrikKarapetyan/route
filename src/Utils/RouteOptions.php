@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace henrik\route\Utils;
+namespace Henrik\Route\Utils;
 
 class RouteOptions
 {

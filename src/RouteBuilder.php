@@ -1,14 +1,14 @@
 <?php
 
-namespace henrik\route;
+namespace Henrik\Route;
 
-use henrik\route\Exceptions\UnknownKeywordException;
-use henrik\route\Interfaces\RouteBuilderConstraintInterface;
-use henrik\route\Interfaces\RouteBuilderInterface;
-use henrik\route\RouteBuilderConstraints\AnyValueTypeConstraint;
-use henrik\route\RouteBuilderConstraints\FloatValueTypeConstraint;
-use henrik\route\RouteBuilderConstraints\IntegerValueTypeConstraint;
-use henrik\route\RouteBuilderConstraints\StringValueTypeConstraint;
+use Henrik\Route\Exceptions\UnknownKeywordException;
+use Henrik\Route\Interfaces\RouteBuilderConstraintInterface;
+use Henrik\Route\Interfaces\RouteBuilderInterface;
+use Henrik\Route\RouteBuilderConstraints\AnyValueTypeConstraint;
+use Henrik\Route\RouteBuilderConstraints\FloatValueTypeConstraint;
+use Henrik\Route\RouteBuilderConstraints\IntegerValueTypeConstraint;
+use Henrik\Route\RouteBuilderConstraints\StringValueTypeConstraint;
 
 class RouteBuilder implements RouteBuilderInterface
 {
