@@ -36,7 +36,7 @@ class Route
      * @param array<string>|null                                            $middlewares
      */
     public function __construct(
-        string $path,
+        string $path = '',
         ?array $methods = null,
         ?array $constraints = null,
         ?array $middlewares = null

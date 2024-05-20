@@ -14,5 +14,6 @@ use RuntimeException;
 
 /**
  * Class RouteException.
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class RouteException extends RuntimeException {}

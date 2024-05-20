@@ -25,46 +25,7 @@ class RoutesParserSubscriber extends AbstractAttributeParser
     {
         if ($event instanceof DetectedClassesEvent) {
             foreach ($event->getDetectedClasses() as $class) {
-                $classRoute = null;
-
-                if (class_exists($class)) {
-                    $reflectionClass = new ReflectionClass($class);
-
-                    $handlerClass = $reflectionClass->getName();
-
-                    if ($reflectionClass->isAbstract()) {
-                        throw new RuntimeException(
-                            sprintf('The handler class `%s` cannot be abstract', $handlerClass)
-                        );
-                    }
-
-                    $reflectionAttributes = $reflectionClass->getAttributes();
-
-                    foreach ($reflectionAttributes as $reflectionAttribute) {
-                        if ($reflectionAttribute->newInstance() instanceof Route) {
-                            $classRoute = $reflectionAttribute->newInstance();
-                        }
-                    }
-
-                    $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
-
-                    if (!is_null($classRoute) && count($methods) == 0) {
-                        throw new RuntimeException('Handler method doesnt set!');
-                    }
-
-                    if (!is_null($classRoute) && $reflectionClass->hasMethod('__invoke')) {
-
-                        $this->routeGraph->add(
-                            methods: $classRoute->methods,
-                            path: $classRoute->path,
-                            handler: $handlerClass,
-                            constraints: $classRoute->constraints,
-                            middlewars: $classRoute->middlewares
-                        );
-                    }
-
-                    $this->parseRoutesFromMethods($classRoute, $methods, $handlerClass);
-                }
+                $this->parseClassAttributes($class);
             }
         }
     }
@@ -105,12 +66,79 @@ class RoutesParserSubscriber extends AbstractAttributeParser
                         methods: $methodAttribute->methods,
                         path: $rootPath . $methodAttribute->path,
                         handler: sprintf('%s#%s', $handlerClass, $handlerMethod),
-                        constraints: $methodAttribute->constraints,
+                        constraints: $methodAttribute->constraints, // @phpstan-ignore-line
                         middlewars: $methodAttribute->middlewares
                     );
                 }
             }
 
+        }
+    }
+
+    /**
+     * @param object|null             $classRoute
+     * @param array<ReflectionMethod> $methods
+     *
+     * @return void
+     */
+    private function checkIsHandlerIsSet(?object $classRoute, array $methods): void
+    {
+
+        if (!is_null($classRoute) && count($methods) == 0) {
+            throw new RuntimeException('Handler method doesnt set!');
+        }
+    }
+
+    private function parseClassAttributes(string $class): void
+    {
+        $classRoute = null;
+
+        if (class_exists($class)) {
+            $reflectionClass = new ReflectionClass($class);
+
+            $handlerClass = $reflectionClass->getName();
+
+            $this->checkIsAbstract($reflectionClass, $handlerClass);
+
+            $reflectionAttributes = $reflectionClass->getAttributes();
+
+            foreach ($reflectionAttributes as $reflectionAttribute) {
+                if ($reflectionAttribute->newInstance() instanceof Route) {
+                    $classRoute = $reflectionAttribute->newInstance();
+                }
+            }
+
+            $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+            $this->checkIsHandlerIsSet($classRoute, $methods);
+
+            if (!is_null($classRoute) && $reflectionClass->hasMethod('__invoke')) {
+
+                $this->routeGraph->add(
+                    methods: $classRoute->methods,
+                    path: $classRoute->path,
+                    handler: $handlerClass,
+                    constraints: $classRoute->constraints, // @phpstan-ignore-line
+                    middlewars: $classRoute->middlewares
+                );
+            }
+
+            $this->parseRoutesFromMethods($classRoute, $methods, $handlerClass);
+        }
+    }
+
+    /**
+     * @param ReflectionClass<object> $reflectionClass
+     * @param string                  $handlerClass
+     *
+     * @return void
+     */
+    private function checkIsAbstract(ReflectionClass $reflectionClass, string $handlerClass): void
+    {
+        if ($reflectionClass->isAbstract()) {
+            throw new RuntimeException(
+                sprintf('The handler class `%s` cannot be abstract', $handlerClass)
+            );
         }
     }
 }
