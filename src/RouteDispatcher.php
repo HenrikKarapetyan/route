@@ -6,21 +6,24 @@ namespace Henrik\Route;
 
 use Henrik\Route\Exceptions\UrlNotFoundException;
 use Henrik\Route\Interfaces\RouteDispatcherInterface;
-use Henrik\Route\Interfaces\RouteFinderInterface;
-use Henrik\Route\Interfaces\RouteInterface;
+use Henrik\Route\Interfaces\RouteMatcherInterface;
+use Hk\Contracts\Route\RouteInterface;
 
 /**
  * Class RouteDispatcher.
  */
 readonly class RouteDispatcher implements RouteDispatcherInterface
 {
-    public function __construct(private RouteFinderInterface $routeFinder) {}
+    public function __construct(private RouteMatcherInterface $routeFinder) {}
 
     /**
      *{@inheritDoc}
      */
-    public function dispatch(?string $uri = null, string $requestMethod = 'GET', array $queryParams = []): RouteInterface
-    {
+    public function dispatch(
+        ?string $uri = null,
+        string $requestMethod = 'GET',
+        array $queryParams = []
+    ): RouteInterface {
         $fullUri       = !is_null($uri) ? $this->urlQueryParamsToUrlSegment($uri, $queryParams) : null;
         $uriSegments[] = '/';
 
@@ -31,7 +34,7 @@ readonly class RouteDispatcher implements RouteDispatcherInterface
             });
         }
 
-        $res = $this->routeFinder->find($uriSegments, $requestMethod);
+        $res = $this->routeFinder->match($uriSegments, $requestMethod);
 
         if (!$res instanceof RouteInterface) {
             throw new UrlNotFoundException((string) $fullUri);

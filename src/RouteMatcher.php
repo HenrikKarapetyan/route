@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Henrik\Route;
 
-use Henrik\Route\Interfaces\RouteFinderInterface;
 use Henrik\Route\Interfaces\RouteGraphBuilderInterface;
 use Henrik\Route\Interfaces\RouteGraphInterface;
-use Henrik\Route\Interfaces\RouteInterface;
+use Henrik\Route\Interfaces\RouteMatcherInterface;
 use Henrik\Route\Utils\RouteOptions;
 use Hk\Contracts\HandlerTypesEnum;
+use Hk\Contracts\Route\RouteInterface;
 
-class RouteFinder implements RouteFinderInterface
+class RouteMatcher implements RouteMatcherInterface
 {
     private string $requestMethod = 'GET';
 
@@ -23,11 +23,11 @@ class RouteFinder implements RouteFinderInterface
      *
      * @return RouteInterface|null
      */
-    public function find(array $uriSegments, string $requestMethod): ?RouteInterface
+    public function match(array $uriSegments, string $requestMethod): ?RouteInterface
     {
         $this->setRequestMethod($requestMethod);
 
-        return $this->routeFinder($this->routeGraph->getRoutes(), $uriSegments);
+        return $this->routeMatcher($this->routeGraph->getRoutes(), $uriSegments);
     }
 
     public function getRequestMethod(): string
@@ -47,14 +47,14 @@ class RouteFinder implements RouteFinderInterface
      *
      * @return ?RouteInterface
      */
-    private function routeFinder(mixed $routes, array $uriSegments, array $routeParams = []): ?RouteInterface
+    private function routeMatcher(mixed $routes, array $uriSegments, array $routeParams = []): ?RouteInterface
     {
         if (is_array($routes)) {
             if (isset($uriSegments[0], $routes[$uriSegments[0]])) {
                 $routes = $routes[$uriSegments[0]];
                 array_shift($uriSegments);
 
-                return $this->routeFinder($routes, $uriSegments, $routeParams);
+                return $this->routeMatcher($routes, $uriSegments, $routeParams);
             }
 
             if (isset($uriSegments[0])) {
@@ -67,7 +67,7 @@ class RouteFinder implements RouteFinderInterface
             }
 
             if (!empty($uriSegments)) {
-                return $this->routeFinder($routes, $uriSegments, $routeParams);
+                return $this->routeMatcher($routes, $uriSegments, $routeParams);
             }
 
             return $this->getRouteResponse($routes[RouteGraphBuilderInterface::ROUTE_OPTIONS_KEY], $routeParams);
@@ -80,9 +80,9 @@ class RouteFinder implements RouteFinderInterface
      * @param array<string, array<string, array<string, array<string>>>> $routes
      * @param array<string, string>                                      $routeParams
      *
-     * @return RouteData|null
+     * @return RouteInterface|null
      */
-    private function getRouteResponse(array $routes, array $routeParams): ?RouteData
+    private function getRouteResponse(array $routes, array $routeParams): ?RouteInterface
     {
         foreach ($routes as $handler => $options) {
 

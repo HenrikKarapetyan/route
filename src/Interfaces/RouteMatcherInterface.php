@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Henrik\Route\Interfaces;
 
-interface RouteFinderInterface
+use Hk\Contracts\Route\RouteInterface;
+
+interface RouteMatcherInterface
 {
     /**
      * @param array<int|string, string|array<int|string, mixed>> $uriSegments
@@ -12,5 +14,5 @@ interface RouteFinderInterface
      *
      * @return RouteInterface|null
      */
-    public function find(array $uriSegments, string $requestMethod): ?RouteInterface;
+    public function match(array $uriSegments, string $requestMethod): ?RouteInterface;
 }

@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace Henrik\Route;
 
-use Henrik\Route\Interfaces\RouteInterface;
-use Henrik\Route\Utils\RouteOptions;
+use Hk\Contracts\Route\RouteInterface;
+use Hk\Contracts\Route\RouteOptionInterface;
 
 /**
  * Class RouteData.
@@ -20,7 +20,7 @@ class RouteData implements RouteInterface
     /** @var array<string, mixed> */
     private array $params = [];
 
-    private RouteOptions $routeOptions;
+    private RouteOptionInterface $routeOptions;
 
     /**
      * @return array<string, mixed>
@@ -49,12 +49,12 @@ class RouteData implements RouteInterface
         $this->params = $params;
     }
 
-    public function getRouteOptions(): RouteOptions
+    public function getRouteOptions(): RouteOptionInterface
     {
         return $this->routeOptions;
     }
 
-    public function setRouteOptions(RouteOptions $routeOptions): void
+    public function setRouteOptions(RouteOptionInterface $routeOptions): void
     {
         $this->routeOptions = $routeOptions;
     }

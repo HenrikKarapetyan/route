@@ -2,12 +2,12 @@
 
 use Henrik\Route\Interfaces\RouteBuilderInterface;
 use Henrik\Route\Interfaces\RouteDispatcherInterface;
-use Henrik\Route\Interfaces\RouteFinderInterface;
 use Henrik\Route\Interfaces\RouteGraphInterface;
+use Henrik\Route\Interfaces\RouteMatcherInterface;
 use Henrik\Route\RouteBuilder;
 use Henrik\Route\RouteDispatcher;
-use Henrik\Route\RouteFinder;
 use Henrik\Route\RouteGraph;
+use Henrik\Route\RouteMatcher;
 use Henrik\Route\Subscribers\RoutesParserSubscriber;
 use Hk\Contracts\Enums\ServiceScope;
 
@@ -33,8 +33,8 @@ return [
 
     ServiceScope::PROTOTYPE->value => [
         [
-            'id'    => RouteFinderInterface::class,
-            'class' => RouteFinder::class,
+            'id'    => RouteMatcherInterface::class,
+            'class' => RouteMatcher::class,
         ],
     ],
 ];

@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Henrik\Route\Utils;
 
 use Hk\Contracts\HandlerTypesEnum;
+use Hk\Contracts\Route\RouteOptionInterface;
 
-class RouteOptions
+class RouteOptions implements RouteOptionInterface
 {
     /**
      * @param string|array<string> $method
@@ -32,11 +33,13 @@ class RouteOptions
     /**
      * @param array<string>|string $method
      *
-     * @return void
+     * @return self
      */
-    public function setMethod(array|string $method): void
+    public function setMethod(array|string $method): self
     {
         $this->method = $method;
+
+        return $this;
     }
 
     public function getHandler(): callable|string
@@ -44,9 +47,11 @@ class RouteOptions
         return $this->handler;
     }
 
-    public function setHandler(callable|string $handler): void
+    public function setHandler(callable|string $handler): self
     {
         $this->handler = $handler;
+
+        return $this;
     }
 
     /**
@@ -60,11 +65,13 @@ class RouteOptions
     /**
      * @param array<string> $middlewares
      *
-     * @return void
+     * @return self
      */
-    public function setMiddlewares(array $middlewares): void
+    public function setMiddlewares(array $middlewares): self
     {
         $this->middlewares = $middlewares;
+
+        return $this;
     }
 
     public function getHandlerType(): HandlerTypesEnum
@@ -72,8 +79,10 @@ class RouteOptions
         return $this->handlerType;
     }
 
-    public function setHandlerType(HandlerTypesEnum $handlerType): void
+    public function setHandlerType(HandlerTypesEnum $handlerType): self
     {
         $this->handlerType = $handlerType;
+
+        return $this;
     }
 }
