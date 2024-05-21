@@ -28,4 +28,9 @@ interface RouteGraphInterface
     public function addNamedRoute(string $name, string $path): void;
 
     public function getRouteByName(string $name, ?string $default = null): ?string;
+
+    /**
+     * @return array<int|string, array<int|string, mixed>|string>|array<mixed>
+     */
+    public function getRoutes(): array;
 }

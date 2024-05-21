@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Henrik\Route;
 
 use Henrik\Route\Interfaces\RouteFinderInterface;
+use Henrik\Route\Interfaces\RouteGraphBuilderInterface;
+use Henrik\Route\Interfaces\RouteGraphInterface;
 use Henrik\Route\Interfaces\RouteInterface;
-use Henrik\Route\Utils\RouteGraphBuilder;
 use Henrik\Route\Utils\RouteOptions;
 use Hk\Contracts\HandlerTypesEnum;
 
@@ -14,7 +15,7 @@ class RouteFinder implements RouteFinderInterface
 {
     private string $requestMethod = 'GET';
 
-    public function __construct(private readonly RouteGraph $routeGraph) {}
+    public function __construct(private readonly RouteGraphInterface $routeGraph) {}
 
     /**
      * @param array<string> $uriSegments
@@ -69,7 +70,7 @@ class RouteFinder implements RouteFinderInterface
                 return $this->routeFinder($routes, $uriSegments, $routeParams);
             }
 
-            return $this->getRouteResponse($routes[RouteGraphBuilder::ROUTE_OPTIONS_KEY], $routeParams);
+            return $this->getRouteResponse($routes[RouteGraphBuilderInterface::ROUTE_OPTIONS_KEY], $routeParams);
         }
 
         return null;

@@ -10,15 +10,15 @@ declare(strict_types=1);
 
 namespace Henrik\Route\Utils;
 
+use Henrik\Route\Interfaces\RouteGraphBuilderInterface;
 use Henrik\Route\RouteConstraints;
 use Hk\Contracts\HandlerTypesEnum;
 
 /**
  * Class RouteGraphBuilder.
  */
-class RouteGraphBuilder
+class RouteGraphBuilder implements RouteGraphBuilderInterface
 {
-    public const ROUTE_OPTIONS_KEY = 'options';
     /**
      * @var array<string, mixed> $data
      */
@@ -49,7 +49,7 @@ class RouteGraphBuilder
             return $this->data;
         }
 
-        $this->data['/'][self::ROUTE_OPTIONS_KEY] = $this->buildOptionsData(); // @phpstan-ignore-line
+        $this->data['/'][RouteGraphBuilderInterface::ROUTE_OPTIONS_KEY] = $this->buildOptionsData(); // @phpstan-ignore-line
 
         return $this->data;
     }
@@ -83,7 +83,7 @@ class RouteGraphBuilder
             return $graph;
         }
 
-        $graph[self::ROUTE_OPTIONS_KEY] = $this->buildOptionsData();
+        $graph[RouteGraphBuilderInterface::ROUTE_OPTIONS_KEY] = $this->buildOptionsData();
 
         return $graph;
     }
