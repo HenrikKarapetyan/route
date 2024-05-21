@@ -3,6 +3,7 @@
 use Henrik\Route\Interfaces\RouteBuilderInterface;
 use Henrik\Route\Interfaces\RouteDispatcherInterface;
 use Henrik\Route\Interfaces\RouteFinderInterface;
+use Henrik\Route\Interfaces\RouteGraphInterface;
 use Henrik\Route\RouteBuilder;
 use Henrik\Route\RouteDispatcher;
 use Henrik\Route\RouteFinder;
@@ -17,7 +18,7 @@ return [
             'class' => RouteDispatcher::class,
         ],
         [
-            'id'    => RouteGraph::class,
+            'id'    => RouteGraphInterface::class,
             'class' => RouteGraph::class,
         ],
         [
