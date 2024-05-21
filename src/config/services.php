@@ -1,7 +1,9 @@
 <?php
 
+use Henrik\Route\Interfaces\RouteBuilderInterface;
 use Henrik\Route\Interfaces\RouteDispatcherInterface;
 use Henrik\Route\Interfaces\RouteFinderInterface;
+use Henrik\Route\RouteBuilder;
 use Henrik\Route\RouteDispatcher;
 use Henrik\Route\RouteFinder;
 use Henrik\Route\RouteGraph;
@@ -21,6 +23,10 @@ return [
         [
             'id'    => RoutesParserSubscriber::class,
             'class' => RoutesParserSubscriber::class,
+        ],
+        [
+            'id'    => RouteBuilderInterface::class,
+            'class' => RouteBuilder::class,
         ],
     ],
 
