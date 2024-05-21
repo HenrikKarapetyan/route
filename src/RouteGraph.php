@@ -24,6 +24,19 @@ class RouteGraph implements RouteGraphInterface
      */
     private array $routes = [];
 
+    /** @var array<string, string> */
+    private array $namedRoutesMap = [];
+
+    public function addNamedRoute(string $name, string $path): void
+    {
+        $this->namedRoutesMap[$name] = $path;
+    }
+
+    public function getRouteByName(string $name, ?string $default = null): ?string
+    {
+        return $this->namedRoutesMap[$name] ?? $default;
+    }
+
     /**
      * {@inheritdoc}
      */

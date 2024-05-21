@@ -24,4 +24,8 @@ interface RouteGraphInterface
         array $middlewars = [],
         ?string $groupName = null
     ): void;
+
+    public function addNamedRoute(string $name, string $path): void;
+
+    public function getRouteByName(string $name, ?string $default = null): ?string;
 }

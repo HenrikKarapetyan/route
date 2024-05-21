@@ -69,6 +69,10 @@ class RoutesParserSubscriber extends AbstractAttributeParser
                         constraints: $methodAttribute->constraints, // @phpstan-ignore-line
                         middlewars: $methodAttribute->middlewares
                     );
+
+                    if ($methodAttribute->name) {
+                        $this->routeGraph->addNamedRoute($methodAttribute->name, $rootPath);
+                    }
                 }
             }
 
@@ -121,6 +125,10 @@ class RoutesParserSubscriber extends AbstractAttributeParser
                     constraints: $classRoute->constraints, // @phpstan-ignore-line
                     middlewars: $classRoute->middlewares
                 );
+
+                if ($classRoute->name) {
+                    $this->routeGraph->addNamedRoute($classRoute->name, $classRoute->path);
+                }
             }
 
             $this->parseRoutesFromMethods($classRoute, $methods, $handlerClass);

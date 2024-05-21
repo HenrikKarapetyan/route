@@ -29,21 +29,26 @@ class Route
      */
     public array $middlewares;
 
+    public ?string $name;
+
     /**
      * @param string                                                        $path
      * @param array<string>                                                 $methods
      * @param ?array<string, array<string, string|int|RouteParamType|null>> $constraints
      * @param array<string>|null                                            $middlewares
+     * @param string|null                                                   $name
      */
     public function __construct(
         string $path = '',
         ?array $methods = null,
         ?array $constraints = null,
-        ?array $middlewares = null
+        ?array $middlewares = null,
+        ?string $name = null
     ) {
         $this->path        = $path;
         $this->methods     = $methods ?: ['GET'];
         $this->constraints = $constraints ?: [];
         $this->middlewares = $middlewares ?: [];
+        $this->name        = $name;
     }
 }
