@@ -95,8 +95,6 @@ class RoutesParserSubscriber extends AbstractAttributeParser
 
     private function parseClassAttributes(string $class): void
     {
-        $classRoute = null;
-
         if (class_exists($class)) {
             $reflectionClass = new ReflectionClass($class);
 
@@ -109,29 +107,11 @@ class RoutesParserSubscriber extends AbstractAttributeParser
             foreach ($reflectionAttributes as $reflectionAttribute) {
                 if ($reflectionAttribute->newInstance() instanceof Route) {
                     $classRoute = $reflectionAttribute->newInstance();
+
+                    $this->parseRoutes($classRoute, $reflectionClass, $handlerClass);
                 }
             }
 
-            $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
-
-            $this->checkIsHandlerIsSet($classRoute, $methods);
-
-            if (!is_null($classRoute) && $reflectionClass->hasMethod('__invoke')) {
-
-                $this->routeGraph->add(
-                    methods: $classRoute->methods,
-                    path: $classRoute->path,
-                    handler: $handlerClass,
-                    constraints: $classRoute->constraints, // @phpstan-ignore-line
-                    middlewars: $classRoute->middlewares
-                );
-
-                if ($classRoute->name) {
-                    $this->routeGraph->addNamedRoute($classRoute->name, $classRoute->path);
-                }
-            }
-
-            $this->parseRoutesFromMethods($classRoute, $methods, $handlerClass);
         }
     }
 
@@ -148,5 +128,36 @@ class RoutesParserSubscriber extends AbstractAttributeParser
                 sprintf('The handler class `%s` cannot be abstract', $handlerClass)
             );
         }
+    }
+
+    /**
+     * @param Route|null              $classRoute
+     * @param ReflectionClass<object> $reflectionClass
+     * @param string                  $handlerClass
+     *
+     * @return void
+     */
+    private function parseRoutes(?Route $classRoute, ReflectionClass $reflectionClass, string $handlerClass): void
+    {
+        $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+
+        $this->checkIsHandlerIsSet($classRoute, $methods);
+
+        if (!is_null($classRoute) && $reflectionClass->hasMethod('__invoke')) {
+
+            $this->routeGraph->add(
+                methods: $classRoute->methods,
+                path: $classRoute->path,
+                handler: $handlerClass,
+                constraints: $classRoute->constraints, // @phpstan-ignore-line
+                middlewars: $classRoute->middlewares
+            );
+
+            if ($classRoute->name) {
+                $this->routeGraph->addNamedRoute($classRoute->name, $classRoute->path);
+            }
+        }
+
+        $this->parseRoutesFromMethods($classRoute, $methods, $handlerClass);
     }
 }
