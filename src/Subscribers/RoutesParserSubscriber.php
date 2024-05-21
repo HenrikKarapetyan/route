@@ -71,7 +71,7 @@ class RoutesParserSubscriber extends AbstractAttributeParser
                     );
 
                     if ($methodAttribute->name) {
-                        $this->routeGraph->addNamedRoute($methodAttribute->name, $rootPath);
+                        $this->routeGraph->addNamedRoute($methodAttribute->name, $rootPath . $methodAttribute->path);
                     }
                 }
             }
