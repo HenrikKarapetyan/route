@@ -49,9 +49,7 @@ class RouteGraphBuilder
             return $this->data;
         }
 
-        $this->data['/'] = [
-            self::ROUTE_OPTIONS_KEY => [$this->buildOptionsData()],
-        ];
+        $this->data['/'][self::ROUTE_OPTIONS_KEY] = $this->buildOptionsData(); // @phpstan-ignore-line
 
         return $this->data;
     }
