@@ -37,7 +37,7 @@ readonly class RequestHandlerSubscriber implements EventSubscriberInterface
 
         $requestFromGlobals = $events->getServerRequest();
 
-        $routeData    = $this->routeDispatcher->dispatch($requestFromGlobals->getUri()->getPath());
+        $routeData    = $this->routeDispatcher->dispatch($requestFromGlobals->getUri()->getPath(), $requestFromGlobals->getMethod());
         $routeOptions = $routeData->getRouteOptions();
 
         $handler = $routeOptions->getHandler();

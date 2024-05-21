@@ -19,7 +19,7 @@ readonly class RouteDispatcher implements RouteDispatcherInterface
     /**
      *{@inheritDoc}
      */
-    public function dispatch(?string $uri = null, string $requestMethod = 'Get', array $queryParams = []): RouteInterface
+    public function dispatch(?string $uri = null, string $requestMethod = 'GET', array $queryParams = []): RouteInterface
     {
         $fullUri       = !is_null($uri) ? $this->urlQueryParamsToUrlSegment($uri, $queryParams) : null;
         $uriSegments[] = '/';

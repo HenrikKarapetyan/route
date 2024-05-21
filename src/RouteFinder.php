@@ -83,10 +83,12 @@ class RouteFinder implements RouteFinderInterface
      */
     private function getRouteResponse(array $routes, array $routeParams): ?RouteData
     {
-        foreach ($routes[RouteGraphBuilder::ROUTE_OPTIONS_KEY] as $handler => $options) {
+        foreach ($routes as $handler => $options) {
+
             if (!in_array($this->getRequestMethod(), $options['method'])) {
                 continue;
             }
+
             $routeData = new RouteData();
             $routeData->setParams($routeParams);
 
@@ -96,6 +98,9 @@ class RouteFinder implements RouteFinderInterface
              * @var HandlerTypesEnum $type
              */
             $type = $options['type'];
+
+            /** @var array<string> $middlewares */
+            $middlewares = $options['middlewares'];
 
             if ($type == HandlerTypesEnum::FUNCTION) {
                 $handlerType = HandlerTypesEnum::FUNCTION;
@@ -107,7 +112,7 @@ class RouteFinder implements RouteFinderInterface
                 new RouteOptions(
                     $this->getRequestMethod(),
                     $handler,
-                    $options['middlewares'],
+                    $middlewares,
                     $handlerType
                 )
             );
