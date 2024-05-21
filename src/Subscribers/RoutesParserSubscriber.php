@@ -31,55 +31,6 @@ class RoutesParserSubscriber extends AbstractAttributeParser
     }
 
     /**
-     * @param array<ReflectionMethod> $methods
-     * @param string                  $handlerClass
-     * @param ?Route                  $classRoute
-     *
-     * @return void
-     */
-    private function parseRoutesFromMethods(?Route $classRoute, array $methods, string $handlerClass): void
-    {
-
-        foreach ($methods as $method) {
-
-            $handlerMethod = $method->getName();
-
-            if ($method->isAbstract()) {
-                throw new RuntimeException(
-                    sprintf('The handler method `%s` cannot be abstract', $handlerMethod)
-                );
-            }
-
-            if ($method->isConstructor()) {
-                continue;
-            }
-
-            $attributes = $method->getAttributes();
-
-            foreach ($attributes as $attribute) {
-
-                $methodAttribute = $attribute->newInstance();
-
-                if ($methodAttribute instanceof Route) {
-                    $rootPath = $classRoute->path ?? '';
-                    $this->routeGraph->add(
-                        methods: $methodAttribute->methods,
-                        path: $rootPath . $methodAttribute->path,
-                        handler: sprintf('%s#%s', $handlerClass, $handlerMethod),
-                        constraints: $methodAttribute->constraints, // @phpstan-ignore-line
-                        middlewars: $methodAttribute->middlewares
-                    );
-
-                    if ($methodAttribute->name) {
-                        $this->routeGraph->addNamedRoute($methodAttribute->name, $rootPath . $methodAttribute->path);
-                    }
-                }
-            }
-
-        }
-    }
-
-    /**
      * @param object|null             $classRoute
      * @param array<ReflectionMethod> $methods
      *
@@ -95,6 +46,8 @@ class RoutesParserSubscriber extends AbstractAttributeParser
 
     private function parseClassAttributes(string $class): void
     {
+        $classRoute = null;
+
         if (class_exists($class)) {
             $reflectionClass = new ReflectionClass($class);
 
@@ -110,6 +63,15 @@ class RoutesParserSubscriber extends AbstractAttributeParser
 
                     $this->parseRoutes($classRoute, $reflectionClass, $handlerClass);
                 }
+            }
+
+            /**
+             * Here methods call means if the class doesn't have any Route attribute then
+             * we're trying to get Route attributes from their methods.
+             */
+            if (is_null($classRoute)) {
+                $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+                $this->parseRoutesFromMethods($classRoute, $methods, $handlerClass);
             }
 
         }
@@ -159,5 +121,54 @@ class RoutesParserSubscriber extends AbstractAttributeParser
         }
 
         $this->parseRoutesFromMethods($classRoute, $methods, $handlerClass);
+    }
+
+    /**
+     * @param array<ReflectionMethod> $methods
+     * @param string                  $handlerClass
+     * @param ?Route                  $classRoute
+     *
+     * @return void
+     */
+    private function parseRoutesFromMethods(?Route $classRoute, array $methods, string $handlerClass): void
+    {
+
+        foreach ($methods as $method) {
+
+            $handlerMethod = $method->getName();
+
+            if ($method->isAbstract()) {
+                throw new RuntimeException(
+                    sprintf('The handler method `%s` cannot be abstract', $handlerMethod)
+                );
+            }
+
+            if ($method->isConstructor()) {
+                continue;
+            }
+
+            $attributes = $method->getAttributes();
+
+            foreach ($attributes as $attribute) {
+
+                $methodAttribute = $attribute->newInstance();
+
+                if ($methodAttribute instanceof Route) {
+                    $rootPath = $classRoute->path ?? '';
+                    $this->routeGraph->add(
+                        methods: $methodAttribute->methods,
+                        path: $rootPath . $methodAttribute->path,
+                        handler: sprintf('%s#%s', $handlerClass, $handlerMethod),
+                        constraints: $methodAttribute->constraints, // @phpstan-ignore-line
+                        middlewars: $methodAttribute->middlewares
+                    );
+
+                    if ($methodAttribute->name) {
+                        $this->routeGraph->addNamedRoute($methodAttribute->name, $rootPath . $methodAttribute->path);
+                    }
+                }
+            }
+
+        }
     }
 }
