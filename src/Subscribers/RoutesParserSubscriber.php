@@ -3,7 +3,7 @@
 namespace Henrik\Route\Subscribers;
 
 use Henrik\Route\Attributes\Route;
-use Henrik\Route\RouteGraph;
+use Henrik\Route\Interfaces\RouteGraphInterface;
 
 use Hk\Contracts\AttributeParser\AbstractAttributeParser;
 use Hk\Contracts\DetectedClassesEvent;
@@ -15,7 +15,7 @@ use RuntimeException;
 class RoutesParserSubscriber extends AbstractAttributeParser
 {
     public function __construct(
-        private readonly RouteGraph $routeGraph
+        private readonly RouteGraphInterface $routeGraph
     ) {}
 
     /**
