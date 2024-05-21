@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Henrik\Route\Utils;
 
 use Henrik\Route\RouteConstraints;
+use Hk\Contracts\HandlerTypesEnum;
 
 /**
  * Class RouteGraphBuilder.
@@ -48,7 +49,9 @@ class RouteGraphBuilder
             return $this->data;
         }
 
-        $this->data['/'][self::ROUTE_OPTIONS_KEY] = $this->options; // @phpstan-ignore-line
+        $this->data['/'] = [
+            self::ROUTE_OPTIONS_KEY => [$this->buildOptionsData()],
+        ];
 
         return $this->data;
     }
@@ -82,7 +85,7 @@ class RouteGraphBuilder
             return $graph;
         }
 
-        $graph[self::ROUTE_OPTIONS_KEY] = $this->options;
+        $graph[self::ROUTE_OPTIONS_KEY] = $this->buildOptionsData();
 
         return $graph;
     }
@@ -99,5 +102,36 @@ class RouteGraphBuilder
         }
 
         return sprintf(RouteConstraints::SEGMENT_PATTERN, $param, RouteConstraints::ANY_PATTERN);
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    private function buildOptionsData(): array
+    {
+        $handler = $this->options->getHandler();
+
+        $method = $this->options->getMethod();
+
+        if (is_string($handler)) {
+
+            return [
+                $handler => [
+                    'method'      => $method,
+                    'type'        => HandlerTypesEnum::METHOD,
+                    'middlewares' => $this->options->getMiddlewares(),
+                ],
+            ];
+        }
+
+        return [
+            'function' . md5(is_array($method) ? implode(',', $method) : $method) => [
+                'type'            => HandlerTypesEnum::FUNCTION,
+                'method'          => $method,
+                'middlewares'     => $this->options->getMiddlewares(),
+                'handlerFunction' => $handler,
+            ],
+        ];
+
     }
 }

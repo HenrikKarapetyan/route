@@ -25,6 +25,6 @@ class UrlNotFoundException extends RouteException
      */
     public function __construct(string $uri, int $code = 404, ?Throwable $previous = null)
     {
-        parent::__construct(sprintf('The requested uri `%s` not found', $uri), $code, $previous);
+        parent::__construct(sprintf('The requested uri `%s` was not found', $uri), $code, $previous);
     }
 }

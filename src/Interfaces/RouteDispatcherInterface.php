@@ -16,9 +16,10 @@ interface RouteDispatcherInterface
 {
     /**
      * @param string|null               $uri
+     * @param string                    $requestMethod
      * @param array<string, int|string> $queryParams
      *
      * @return RouteInterface
      */
-    public function dispatch(?string $uri = null, array $queryParams = []): RouteInterface;
+    public function dispatch(?string $uri = null, string $requestMethod = 'Get', array $queryParams = []): RouteInterface;
 }

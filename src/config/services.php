@@ -19,12 +19,15 @@ return [
             'class' => RouteGraph::class,
         ],
         [
-            'id'    => RouteFinderInterface::class,
-            'class' => RouteFinder::class,
-        ],
-        [
             'id'    => RoutesParserSubscriber::class,
             'class' => RoutesParserSubscriber::class,
+        ],
+    ],
+
+    ServiceScope::PROTOTYPE->value => [
+        [
+            'id'    => RouteFinderInterface::class,
+            'class' => RouteFinder::class,
         ],
     ],
 ];

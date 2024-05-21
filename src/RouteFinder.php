@@ -7,19 +7,36 @@ namespace Henrik\Route;
 use Henrik\Route\Interfaces\RouteFinderInterface;
 use Henrik\Route\Interfaces\RouteInterface;
 use Henrik\Route\Utils\RouteGraphBuilder;
+use Henrik\Route\Utils\RouteOptions;
+use Hk\Contracts\HandlerTypesEnum;
 
-readonly class RouteFinder implements RouteFinderInterface
+class RouteFinder implements RouteFinderInterface
 {
-    public function __construct(private RouteGraph $routeGraph) {}
+    private string $requestMethod = 'GET';
+
+    public function __construct(private readonly RouteGraph $routeGraph) {}
 
     /**
      * @param array<string> $uriSegments
+     * @param string        $requestMethod
      *
      * @return RouteInterface|null
      */
-    public function find(array $uriSegments): ?RouteInterface
+    public function find(array $uriSegments, string $requestMethod): ?RouteInterface
     {
+        $this->setRequestMethod($requestMethod);
+
         return $this->routeFinder($this->routeGraph->getRoutes(), $uriSegments);
+    }
+
+    public function getRequestMethod(): string
+    {
+        return $this->requestMethod;
+    }
+
+    public function setRequestMethod(string $requestMethod): void
+    {
+        $this->requestMethod = $requestMethod;
     }
 
     /**
@@ -52,11 +69,51 @@ readonly class RouteFinder implements RouteFinderInterface
                 return $this->routeFinder($routes, $uriSegments, $routeParams);
             }
 
-            $route = new RouteData();
-            $route->setRouteOptions($routes[RouteGraphBuilder::ROUTE_OPTIONS_KEY]);
-            $route->setParams($routeParams);
+            return $this->getRouteResponse($routes[RouteGraphBuilder::ROUTE_OPTIONS_KEY], $routeParams);
+        }
 
-            return $route;
+        return null;
+    }
+
+    /**
+     * @param array<string, array<string, array<string, array<string>>>> $routes
+     * @param array<string, string>                                      $routeParams
+     *
+     * @return RouteData|null
+     */
+    private function getRouteResponse(array $routes, array $routeParams): ?RouteData
+    {
+        foreach ($routes[RouteGraphBuilder::ROUTE_OPTIONS_KEY] as $handler => $options) {
+            if (!in_array($this->getRequestMethod(), $options['method'])) {
+                continue;
+            }
+            $routeData = new RouteData();
+            $routeData->setParams($routeParams);
+
+            $handlerType = HandlerTypesEnum::METHOD;
+
+            /**
+             * @var HandlerTypesEnum $type
+             */
+            $type = $options['type'];
+
+            if ($type == HandlerTypesEnum::FUNCTION) {
+                $handlerType = HandlerTypesEnum::FUNCTION;
+                /** @var callable $handler */
+                $handler = $options['handlerFunction'];
+            }
+
+            $routeData->setRouteOptions(
+                new RouteOptions(
+                    $this->getRequestMethod(),
+                    $handler,
+                    $options['middlewares'],
+                    $handlerType
+                )
+            );
+
+            return $routeData;
+
         }
 
         return null;

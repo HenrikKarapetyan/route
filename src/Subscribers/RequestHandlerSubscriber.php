@@ -2,12 +2,13 @@
 
 namespace Henrik\Route\Subscribers;
 
-use Henrik\Route\Exceptions\RequestMethodNotAvailableException;
 use Henrik\Route\Interfaces\RouteDispatcherInterface;
+use Henrik\Route\Interfaces\RouteInterface;
 use Hk\Contracts\CoreEvents;
 use Hk\Contracts\DependencyInjectorInterface;
 use Hk\Contracts\EventSubscriberInterface;
 use Hk\Contracts\FunctionInvokerInterface;
+use Hk\Contracts\HandlerTypesEnum;
 use Hk\Contracts\MethodInvokerInterface;
 use Hk\Contracts\ServerRequestFromGlobalsInterface;
 use Hk\Contracts\Utils\MarkersInterface;
@@ -36,17 +37,27 @@ readonly class RequestHandlerSubscriber implements EventSubscriberInterface
 
         $requestFromGlobals = $events->getServerRequest();
 
-        $res = $this->routeDispatcher->dispatch($requestFromGlobals->getUri()->getPath());
+        $routeData    = $this->routeDispatcher->dispatch($requestFromGlobals->getUri()->getPath());
+        $routeOptions = $routeData->getRouteOptions();
 
-        $handler = $res->getRouteOptions()->getHandler();
+        $handler = $routeOptions->getHandler();
 
-        $this->checkIsRequestMethodsAvailable($requestFromGlobals->getMethod(), $res->getRouteOptions()->getMethod());
+        switch ($routeOptions->getHandlerType()) {
+            case HandlerTypesEnum::FUNCTION:
+                $this->functionInvoker->invoke($handler, $routeData->getParams()); // @phpstan-ignore-line
 
-        if (is_callable($handler)) {
-            $this->functionInvoker->invoke($handler, $res->getParams()); // @phpstan-ignore-line
+                break;
 
-            return;
+            case HandlerTypesEnum::METHOD:
+                /** @var string $handler */
+                $this->resolveMethodCall($handler, $routeData);
+
         }
+
+    }
+
+    private function resolveMethodCall(string $handler, RouteInterface $routeData): void
+    {
 
         $handlerArray = explode(MarkersInterface::AS_SERVICE_PARAM_MARKER, $handler);
 
@@ -54,32 +65,11 @@ readonly class RequestHandlerSubscriber implements EventSubscriberInterface
         $controller = $this->dependencyInjector->get($handlerArray[0]);
 
         if (is_callable($controller) && !isset($handlerArray[1])) {
-            $controller($res->getParams());
+            $controller($routeData->getParams());
 
             return;
         }
 
-        $this->methodInvoker->invoke($controller, $handlerArray[1], $res->getParams());
-    }
-
-    /**
-     * @param string               $requestMethod
-     * @param array<string>|string $availableMethods
-     *
-     * @return void
-     */
-    private function checkIsRequestMethodsAvailable(string $requestMethod, array|string $availableMethods): void
-    {
-        if (is_string($availableMethods)) {
-            if ($requestMethod !== $availableMethods) {
-                throw new RequestMethodNotAvailableException($requestMethod, [$availableMethods]);
-            }
-
-            return;
-        }
-
-        if (!in_array($requestMethod, $availableMethods)) {
-            throw new RequestMethodNotAvailableException($requestMethod, $availableMethods);
-        }
+        $this->methodInvoker->invoke($controller, $handlerArray[1], $routeData->getParams());
     }
 }

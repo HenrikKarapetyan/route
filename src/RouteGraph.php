@@ -12,6 +12,7 @@ namespace Henrik\Route;
 use Henrik\Route\Interfaces\RouteGraphInterface;
 use Henrik\Route\Utils\RouteGraphBuilder;
 use Henrik\Route\Utils\RouteOptions;
+use Hk\Contracts\HandlerTypesEnum;
 
 /**
  * Class RouteCollector.
@@ -51,7 +52,12 @@ class RouteGraph implements RouteGraphInterface
             $constraint = (new RouteConstraints())->buildFromArray($constraints);
         }
 
-        $options           = new RouteOptions($methods, $handler, $middlewars);
+        $options = new RouteOptions(
+            $methods,
+            $handler,
+            $middlewars,
+            is_callable($handler) ? HandlerTypesEnum::FUNCTION : HandlerTypesEnum::METHOD
+        );
         $routeGraphBuilder = new RouteGraphBuilder($route, $options, $constraint);
         $routeParsedData   = $routeGraphBuilder->build();
 

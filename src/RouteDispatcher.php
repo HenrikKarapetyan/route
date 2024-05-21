@@ -19,7 +19,7 @@ readonly class RouteDispatcher implements RouteDispatcherInterface
     /**
      *{@inheritDoc}
      */
-    public function dispatch(?string $uri = null, array $queryParams = []): RouteInterface
+    public function dispatch(?string $uri = null, string $requestMethod = 'Get', array $queryParams = []): RouteInterface
     {
         $fullUri       = !is_null($uri) ? $this->urlQueryParamsToUrlSegment($uri, $queryParams) : null;
         $uriSegments[] = '/';
@@ -31,7 +31,7 @@ readonly class RouteDispatcher implements RouteDispatcherInterface
             });
         }
 
-        $res = $this->routeFinder->find($uriSegments);
+        $res = $this->routeFinder->find($uriSegments, $requestMethod);
 
         if (!$res instanceof RouteInterface) {
             throw new UrlNotFoundException((string) $fullUri);

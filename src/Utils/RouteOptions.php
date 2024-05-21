@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace Henrik\Route\Utils;
 
+use Hk\Contracts\HandlerTypesEnum;
+
 class RouteOptions
 {
     /**
      * @param string|array<string> $method
      * @param string|callable      $handler
      * @param array<string>        $middlewares
+     * @param HandlerTypesEnum     $handlerType
      */
     public function __construct(
         private array|string $method,
         private $handler,
-        private array $middlewares
+        private array $middlewares,
+        private HandlerTypesEnum $handlerType
     ) {}
 
     /**
@@ -61,5 +65,15 @@ class RouteOptions
     public function setMiddlewares(array $middlewares): void
     {
         $this->middlewares = $middlewares;
+    }
+
+    public function getHandlerType(): HandlerTypesEnum
+    {
+        return $this->handlerType;
+    }
+
+    public function setHandlerType(HandlerTypesEnum $handlerType): void
+    {
+        $this->handlerType = $handlerType;
     }
 }
