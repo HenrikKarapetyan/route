@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Henrik\Route;
 
+use Henrik\Contracts\BaseComponent;
 use Henrik\Route\Attributes\Delete;
 use Henrik\Route\Attributes\Get;
 use Henrik\Route\Attributes\Head;
@@ -12,7 +13,6 @@ use Henrik\Route\Attributes\Post;
 use Henrik\Route\Attributes\Put;
 use Henrik\Route\Attributes\Route;
 use Henrik\Route\Subscribers\RequestHandlerSubscriber;
-use Hk\Contracts\BaseComponent;
 
 class RouteComponent extends BaseComponent
 {

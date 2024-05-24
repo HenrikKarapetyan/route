@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Henrik\Route;
 
+use Henrik\Contracts\Route\RouteInterface;
 use Henrik\Route\Exceptions\UrlNotFoundException;
 use Henrik\Route\Interfaces\RouteDispatcherInterface;
 use Henrik\Route\Interfaces\RouteMatcherInterface;
-use Hk\Contracts\Route\RouteInterface;
 
 /**
  * Class RouteDispatcher.

@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace Henrik\Route;
 
-use Hk\Contracts\Route\RouteInterface;
-use Hk\Contracts\Route\RouteOptionInterface;
+use Henrik\Contracts\Route\RouteInterface;
+use Henrik\Contracts\Route\RouteOptionInterface;
 
 /**
  * Class RouteData.

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Henrik\Route\Utils;
 
-use Hk\Contracts\HandlerTypesEnum;
-use Hk\Contracts\Route\RouteOptionInterface;
+use Henrik\Contracts\HandlerTypesEnum;
+use Henrik\Contracts\Route\RouteOptionInterface;
 
 class RouteOptions implements RouteOptionInterface
 {

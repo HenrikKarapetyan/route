@@ -2,11 +2,11 @@
 
 namespace Henrik\Route\Subscribers;
 
+use Henrik\Contracts\CoreEvents;
+use Henrik\Contracts\EventDispatcherInterface;
+use Henrik\Contracts\EventSubscriberInterface;
+use Henrik\Contracts\ServerRequestFromGlobalsInterface;
 use Henrik\Route\Interfaces\RouteDispatcherInterface;
-use Hk\Contracts\CoreEvents;
-use Hk\Contracts\EventDispatcherInterface;
-use Hk\Contracts\EventSubscriberInterface;
-use Hk\Contracts\ServerRequestFromGlobalsInterface;
 
 readonly class RequestHandlerSubscriber implements EventSubscriberInterface
 {

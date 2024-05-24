@@ -1,5 +1,6 @@
 <?php
 
+use Henrik\Contracts\Enums\ServiceScope;
 use Henrik\Route\Interfaces\RouteBuilderInterface;
 use Henrik\Route\Interfaces\RouteDispatcherInterface;
 use Henrik\Route\Interfaces\RouteGraphInterface;
@@ -9,7 +10,6 @@ use Henrik\Route\RouteBuilder;
 use Henrik\Route\RouteDispatcher;
 use Henrik\Route\RouteGraph;
 use Henrik\Route\RouteMatcher;
-use Hk\Contracts\Enums\ServiceScope;
 
 return [
     ServiceScope::SINGLETON->value => [

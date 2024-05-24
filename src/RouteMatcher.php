@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Henrik\Route;
 
+use Henrik\Contracts\HandlerTypesEnum;
+use Henrik\Contracts\Route\RouteInterface;
 use Henrik\Route\Interfaces\RouteGraphBuilderInterface;
 use Henrik\Route\Interfaces\RouteGraphInterface;
 use Henrik\Route\Interfaces\RouteMatcherInterface;
 use Henrik\Route\Utils\RouteOptions;
-use Hk\Contracts\HandlerTypesEnum;
-use Hk\Contracts\Route\RouteInterface;
 
 class RouteMatcher implements RouteMatcherInterface
 {

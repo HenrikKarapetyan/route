@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace Henrik\Route;
 
+use Henrik\Contracts\HandlerTypesEnum;
 use Henrik\Route\Interfaces\RouteGraphInterface;
 use Henrik\Route\Utils\RouteGraphBuilder;
 use Henrik\Route\Utils\RouteOptions;
-use Hk\Contracts\HandlerTypesEnum;
 
 /**
  * Class RouteCollector.

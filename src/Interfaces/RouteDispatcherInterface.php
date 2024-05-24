@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Henrik\Route\Interfaces;
 
-use Hk\Contracts\Route\RouteInterface;
+use Henrik\Contracts\Route\RouteInterface;
 
 /**
  * Interface RouteDispatcherInterface.

@@ -2,9 +2,9 @@
 
 namespace Henrik\Route;
 
+use Henrik\Contracts\AttributeParser\AttributeParserInterface;
 use Henrik\Route\Attributes\Route;
 use Henrik\Route\Interfaces\RouteGraphInterface;
-use Hk\Contracts\AttributeParser\AttributeParserInterface;
 use ReflectionClass;
 use ReflectionMethod;
 use RuntimeException;
