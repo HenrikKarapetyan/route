@@ -1,6 +1,8 @@
 <?php
 
+use Henrik\Contracts\CoreEvents;
 use Henrik\Contracts\Enums\ServiceScope;
+use Henrik\Events\EventDispatcher;
 use Henrik\Route\Interfaces\RouteBuilderInterface;
 use Henrik\Route\Interfaces\RouteDispatcherInterface;
 use Henrik\Route\Interfaces\RouteGraphInterface;
@@ -28,6 +30,10 @@ return [
         [
             'id'    => RouteBuilderInterface::class,
             'class' => RouteBuilder::class,
+        ],
+        [
+            'id'    => CoreEvents::ROUTE_DISPATCHER_DEFAULT_DEFINITION_ID,
+            'class' => EventDispatcher::class,
         ],
     ],
 

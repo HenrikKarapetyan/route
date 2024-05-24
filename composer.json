@@ -13,7 +13,8 @@
   "require": {
     "php": ">=8.2",
     "henrik/container": "dev-master",
-    "henrik/contracts": "dev-main"
+    "henrik/contracts": "dev-main",
+    "henrik/events": "dev-master"
   },
   "autoload": {
     "psr-4": {
