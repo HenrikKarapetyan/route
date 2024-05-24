@@ -1,33 +1,40 @@
 <?php
 
-namespace Henrik\Route\Subscribers;
+namespace Henrik\Route;
 
 use Henrik\Route\Attributes\Route;
 use Henrik\Route\Interfaces\RouteGraphInterface;
-
-use Hk\Contracts\AttributeParser\AbstractAttributeParser;
-use Hk\Contracts\DetectedClassesEvent;
-use Hk\Contracts\EventInterface;
+use Hk\Contracts\AttributeParser\AttributeParserInterface;
 use ReflectionClass;
 use ReflectionMethod;
 use RuntimeException;
 
-class RoutesParserSubscriber extends AbstractAttributeParser
+readonly class RouteAttributesParser implements AttributeParserInterface
 {
     public function __construct(
-        private readonly RouteGraphInterface $routeGraph
+        private RouteGraphInterface $routeGraph
     ) {}
 
-    /**
-     * @param EventInterface $event
-     */
-    public function onParseAttributes(EventInterface $event): void
+    public function parse(?object $attributeClass, ReflectionClass $reflectionClass): void
     {
-        if ($event instanceof DetectedClassesEvent) {
-            foreach ($event->getDetectedClasses() as $class) {
-                $this->parseClassAttributes($class);
-            }
+        /** @var ?Route $routeAttribute */
+        $routeAttribute = $attributeClass;
+
+        $handlerClass = $reflectionClass->getName();
+
+        $this->checkIsAbstract($reflectionClass, $handlerClass);
+
+        $this->parseRoutes($routeAttribute, $reflectionClass, $handlerClass);
+
+        /**
+         * Here methods call means if the class doesn't have any Route attribute then
+         * we're trying to get Route attributes from their methods.
+         */
+        if (is_null($routeAttribute)) {
+            $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+            $this->parseRoutesFromMethods($routeAttribute, $methods, $handlerClass);
         }
+
     }
 
     /**
@@ -41,39 +48,6 @@ class RoutesParserSubscriber extends AbstractAttributeParser
 
         if (!is_null($classRoute) && count($methods) == 0) {
             throw new RuntimeException('Handler method doesnt set!');
-        }
-    }
-
-    private function parseClassAttributes(string $class): void
-    {
-        $classRoute = null;
-
-        if (class_exists($class)) {
-            $reflectionClass = new ReflectionClass($class);
-
-            $handlerClass = $reflectionClass->getName();
-
-            $this->checkIsAbstract($reflectionClass, $handlerClass);
-
-            $reflectionAttributes = $reflectionClass->getAttributes();
-
-            foreach ($reflectionAttributes as $reflectionAttribute) {
-                if ($reflectionAttribute->newInstance() instanceof Route) {
-                    $classRoute = $reflectionAttribute->newInstance();
-
-                    $this->parseRoutes($classRoute, $reflectionClass, $handlerClass);
-                }
-            }
-
-            /**
-             * Here methods call means if the class doesn't have any Route attribute then
-             * we're trying to get Route attributes from their methods.
-             */
-            if (is_null($classRoute)) {
-                $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
-                $this->parseRoutesFromMethods($classRoute, $methods, $handlerClass);
-            }
-
         }
     }
 

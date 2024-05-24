@@ -4,11 +4,11 @@ use Henrik\Route\Interfaces\RouteBuilderInterface;
 use Henrik\Route\Interfaces\RouteDispatcherInterface;
 use Henrik\Route\Interfaces\RouteGraphInterface;
 use Henrik\Route\Interfaces\RouteMatcherInterface;
+use Henrik\Route\RouteAttributesParser;
 use Henrik\Route\RouteBuilder;
 use Henrik\Route\RouteDispatcher;
 use Henrik\Route\RouteGraph;
 use Henrik\Route\RouteMatcher;
-use Henrik\Route\Subscribers\RoutesParserSubscriber;
 use Hk\Contracts\Enums\ServiceScope;
 
 return [
@@ -22,8 +22,8 @@ return [
             'class' => RouteGraph::class,
         ],
         [
-            'id'    => RoutesParserSubscriber::class,
-            'class' => RoutesParserSubscriber::class,
+            'id'    => RouteAttributesParser::class,
+            'class' => RouteAttributesParser::class,
         ],
         [
             'id'    => RouteBuilderInterface::class,
