@@ -6,7 +6,7 @@ namespace Henrik\Route;
 
 use Henrik\Contracts\BaseComponent;
 use Henrik\Contracts\ComponentInterfaces\AttributesAndParsersAwareInterface;
-use Henrik\Contracts\ComponentInterfaces\EventAwareInterface;
+use Henrik\Contracts\ComponentInterfaces\EventSubscriberAwareInterface;
 use Henrik\Route\Attributes\Delete;
 use Henrik\Route\Attributes\Get;
 use Henrik\Route\Attributes\Head;
@@ -16,7 +16,7 @@ use Henrik\Route\Attributes\Put;
 use Henrik\Route\Attributes\Route;
 use Henrik\Route\Subscribers\RequestHandlerSubscriber;
 
-class RouteComponent extends BaseComponent implements AttributesAndParsersAwareInterface, EventAwareInterface
+class RouteComponent extends BaseComponent implements AttributesAndParsersAwareInterface, EventSubscriberAwareInterface
 {
     /**
      * {@inheritDoc}
