@@ -45,7 +45,7 @@ class RouteComponent extends BaseComponent implements AttributesAndParsersAwareI
     public function getEventSubscribers(): array
     {
         return [
-            CoreEvents::ROUTE_DISPATCHER_DEFAULT_DEFINITION_ID => RequestHandlerSubscriber::class,
+            CoreEvents::ROUTE_DISPATCHER_DEFAULT_DEFINITION_ID => [RequestHandlerSubscriber::class],
         ];
     }
 
