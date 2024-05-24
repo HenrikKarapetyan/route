@@ -29,7 +29,7 @@ readonly class RequestHandlerSubscriber implements EventSubscriberInterface
     {
 
         $routeData = $this->routeDispatcher->dispatch(
-            $request->getUri(),
+            $request->getRequestUri(),
             $request->getMethod()
         );
 
