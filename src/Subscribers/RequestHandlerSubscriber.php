@@ -5,7 +5,7 @@ namespace Henrik\Route\Subscribers;
 use Henrik\Contracts\CoreEvents;
 use Henrik\Contracts\EventDispatcherInterface;
 use Henrik\Contracts\EventSubscriberInterface;
-use Henrik\Contracts\ServerRequestFromGlobalsInterface;
+use Henrik\Contracts\Http\RequestInterface;
 use Henrik\Route\Interfaces\RouteDispatcherInterface;
 
 readonly class RequestHandlerSubscriber implements EventSubscriberInterface
@@ -23,16 +23,14 @@ readonly class RequestHandlerSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param ServerRequestFromGlobalsInterface $events
+     * @param RequestInterface $request
      */
-    public function handleServerRequest(ServerRequestFromGlobalsInterface $events): void
+    public function handleServerRequest(RequestInterface $request): void
     {
 
-        $requestFromGlobals = $events->getServerRequest();
-
         $routeData = $this->routeDispatcher->dispatch(
-            $requestFromGlobals->getUri()->getPath(),
-            $requestFromGlobals->getMethod()
+            $request->getUri(),
+            $request->getMethod()
         );
 
         $this->eventDispatcher->dispatch($routeData, CoreEvents::ROUTE_MATCH_EVENTS);
