@@ -6,6 +6,7 @@ namespace Henrik\Route;
 
 use Henrik\Contracts\BaseComponent;
 use Henrik\Contracts\ComponentInterfaces\AttributesAndParsersAwareInterface;
+use Henrik\Contracts\Enums\ServiceScope;
 use Henrik\Route\Attributes\Delete;
 use Henrik\Route\Attributes\Get;
 use Henrik\Route\Attributes\Head;
@@ -13,6 +14,10 @@ use Henrik\Route\Attributes\Patch;
 use Henrik\Route\Attributes\Post;
 use Henrik\Route\Attributes\Put;
 use Henrik\Route\Attributes\Route;
+use Henrik\Route\Interfaces\RouteBuilderInterface;
+use Henrik\Route\Interfaces\RouteDispatcherInterface;
+use Henrik\Route\Interfaces\RouteGraphInterface;
+use Henrik\Route\Interfaces\RouteMatcherInterface;
 
 class RouteComponent extends BaseComponent implements AttributesAndParsersAwareInterface
 {
@@ -21,7 +26,33 @@ class RouteComponent extends BaseComponent implements AttributesAndParsersAwareI
      */
     public function getServices(): array
     {
-        return require 'config/services.php';
+        return [
+            ServiceScope::SINGLETON->value => [
+                [
+                    'id' => RouteDispatcherInterface::class,
+                    'class' => RouteDispatcher::class,
+                ],
+                [
+                    'id' => RouteGraphInterface::class,
+                    'class' => RouteGraph::class,
+                ],
+                [
+                    'id' => RouteAttributesParser::class,
+                    'class' => RouteAttributesParser::class,
+                ],
+                [
+                    'id' => RouteBuilderInterface::class,
+                    'class' => RouteBuilder::class,
+                ],
+            ],
+
+            ServiceScope::PROTOTYPE->value => [
+                [
+                    'id' => RouteMatcherInterface::class,
+                    'class' => RouteMatcher::class,
+                ],
+            ],
+        ];
     }
 
     public function getAttributesAndParsers(): array
