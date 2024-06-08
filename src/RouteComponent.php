@@ -44,10 +44,6 @@ class RouteComponent extends BaseComponent implements AttributesAndParsersAwareI
                 [
                     'id' => RouteBuilderInterface::class,
                     'class' => RouteBuilder::class,
-                ],
-                [
-                    'id' => 'routeEventDispatcher',
-                    'class' => EventDispatcher::class
                 ]
             ],
 
