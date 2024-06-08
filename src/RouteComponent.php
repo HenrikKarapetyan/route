@@ -7,6 +7,7 @@ namespace Henrik\Route;
 use Henrik\Contracts\BaseComponent;
 use Henrik\Contracts\ComponentInterfaces\AttributesAndParsersAwareInterface;
 use Henrik\Contracts\Enums\ServiceScope;
+use Henrik\Events\EventDispatcher;
 use Henrik\Route\Attributes\Delete;
 use Henrik\Route\Attributes\Get;
 use Henrik\Route\Attributes\Head;
@@ -44,6 +45,10 @@ class RouteComponent extends BaseComponent implements AttributesAndParsersAwareI
                     'id' => RouteBuilderInterface::class,
                     'class' => RouteBuilder::class,
                 ],
+                [
+                    'id' => 'routeEventDispatcher',
+                    'class' => EventDispatcher::class
+                ]
             ],
 
             ServiceScope::PROTOTYPE->value => [
