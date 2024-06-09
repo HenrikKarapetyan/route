@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Henrik\Route;
 
 use Henrik\Contracts\BaseComponent;
-use Henrik\Contracts\ComponentInterfaces\AttributesAndParsersAwareInterface;
+use Henrik\Contracts\ComponentInterfaces\OnAttributesAndParsersAwareInterface;
 use Henrik\Contracts\Enums\ServiceScope;
-use Henrik\Events\EventDispatcher;
 use Henrik\Route\Attributes\Delete;
 use Henrik\Route\Attributes\Get;
 use Henrik\Route\Attributes\Head;
@@ -20,7 +19,7 @@ use Henrik\Route\Interfaces\RouteDispatcherInterface;
 use Henrik\Route\Interfaces\RouteGraphInterface;
 use Henrik\Route\Interfaces\RouteMatcherInterface;
 
-class RouteComponent extends BaseComponent implements AttributesAndParsersAwareInterface
+class RouteComponent extends BaseComponent implements OnAttributesAndParsersAwareInterface
 {
     /**
      * {@inheritDoc}
