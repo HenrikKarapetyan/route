@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Henrik\Route;
 
 use Henrik\Route\Exceptions\InvalidRangeException;
-use Henrik\Route\Exceptions\UnsupportedRouteTypeParamException;
 use Henrik\Route\Utils\RouteParamType;
 
 /**
@@ -191,8 +190,9 @@ class RouteConstraints
                 $this->set([$routeParam])->asInteger($from, $to);
 
                 break;
-
-            default: throw new UnsupportedRouteTypeParamException(sprintf('Unsupported `%s` route type', $type->value));
+            case RouteParamType::TYPE_ANY:
+                $this->set([$routeParam])->any($from, $to);
+                break;
         }
     }
 }

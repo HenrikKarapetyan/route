@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Henrik\Route;
 
 use Henrik\Contracts\HandlerTypesEnum;
+use Henrik\Route\Exceptions\NamedRouteException;
 use Henrik\Route\Interfaces\RouteGraphInterface;
 use Henrik\Route\Utils\RouteGraphBuilder;
 use Henrik\Route\Utils\RouteOptions;
@@ -27,11 +28,6 @@ class RouteGraph implements RouteGraphInterface
     /** @var array<string, string> */
     private array $namedRoutesMap = [];
 
-    public function addNamedRoute(string $name, string $path): void
-    {
-        $this->namedRoutesMap[$name] = $path;
-    }
-
     public function getRouteByName(string $name, ?string $default = null): ?string
     {
         return $this->namedRoutesMap[$name] ?? $default;
@@ -39,19 +35,32 @@ class RouteGraph implements RouteGraphInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param array               $methods
+     * @param string              $path
+     * @param callable|string     $handler
+     * @param array|callable|null $constraints
+     * @param array               $middlewares
+     * @param string|null         $groupName
+     * @param string|null         $name
      */
     public function add(
         array $methods,
         string $path,
         callable|string $handler,
         null|array|callable $constraints = null,
-        array $middlewars = [],
-        ?string $groupName = null
+        array $middlewares = [],
+        ?string $groupName = null,
+        ?string $name = null
     ): void {
         $route = $path;
 
         if ($groupName) {
-            $route = $groupName . $path;
+            $route = sprintf('/%s/%s', trim($groupName, '/'), ltrim($route, '/'));
+        }
+
+        if ($name) {
+            $this->addNamedRoute($name, $route);
         }
 
         $constraint = null;
@@ -68,9 +77,10 @@ class RouteGraph implements RouteGraphInterface
         $options = new RouteOptions(
             $methods,
             $handler,
-            $middlewars,
+            $middlewares,
             is_callable($handler) ? HandlerTypesEnum::FUNCTION : HandlerTypesEnum::METHOD
         );
+
         $routeGraphBuilder = new RouteGraphBuilder($route, $options, $constraint);
         $routeParsedData   = $routeGraphBuilder->build();
 
@@ -90,5 +100,15 @@ class RouteGraph implements RouteGraphInterface
     public function getRoutes(): array
     {
         return $this->routes;
+    }
+
+    private function addNamedRoute(string $name, string $path): void
+    {
+        if (isset($this->namedRoutesMap[$name])) {
+            throw new NamedRouteException($name, $path, $this->namedRoutesMap[$name]);
+        }
+
+        $this->namedRoutesMap[$name] = $path;
+
     }
 }

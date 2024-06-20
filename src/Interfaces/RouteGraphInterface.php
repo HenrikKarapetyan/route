@@ -11,8 +11,9 @@ interface RouteGraphInterface
      * @param string                                                                   $path
      * @param string|callable                                                          $handler
      * @param callable|array<string, string|array<string, array<string, string>>>|null $constraints
-     * @param array<string>                                                            $middlewars
+     * @param array<string>                                                            $middlewares
      * @param string|null                                                              $groupName
+     * @param string|null                                                              $name
      *
      * @return void
      */
@@ -21,11 +22,10 @@ interface RouteGraphInterface
         string $path,
         callable|string $handler,
         null|array|callable $constraints = null,
-        array $middlewars = [],
-        ?string $groupName = null
+        array $middlewares = [],
+        ?string $groupName = null,
+        ?string $name = null
     ): void;
-
-    public function addNamedRoute(string $name, string $path): void;
 
     public function getRouteByName(string $name, ?string $default = null): ?string;
 

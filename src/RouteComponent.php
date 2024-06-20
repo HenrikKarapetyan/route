@@ -29,26 +29,26 @@ class RouteComponent extends BaseComponent implements OnAttributesAndParsersAwar
         return [
             ServiceScope::SINGLETON->value => [
                 [
-                    'id' => RouteDispatcherInterface::class,
+                    'id'    => RouteDispatcherInterface::class,
                     'class' => RouteDispatcher::class,
                 ],
                 [
-                    'id' => RouteGraphInterface::class,
+                    'id'    => RouteGraphInterface::class,
                     'class' => RouteGraph::class,
                 ],
                 [
-                    'id' => RouteAttributesParser::class,
+                    'id'    => RouteAttributesParser::class,
                     'class' => RouteAttributesParser::class,
                 ],
                 [
-                    'id' => RouteBuilderInterface::class,
+                    'id'    => RouteBuilderInterface::class,
                     'class' => RouteBuilder::class,
-                ]
+                ],
             ],
 
             ServiceScope::PROTOTYPE->value => [
                 [
-                    'id' => RouteMatcherInterface::class,
+                    'id'    => RouteMatcherInterface::class,
                     'class' => RouteMatcher::class,
                 ],
             ],
@@ -58,12 +58,12 @@ class RouteComponent extends BaseComponent implements OnAttributesAndParsersAwar
     public function getAttributesAndParsers(): array
     {
         return [
-            Route::class => RouteAttributesParser::class,
-            Get::class => RouteAttributesParser::class,
-            Post::class => RouteAttributesParser::class,
-            Put::class => RouteAttributesParser::class,
-            Patch::class => RouteAttributesParser::class,
-            Head::class => RouteAttributesParser::class,
+            Route::class  => RouteAttributesParser::class,
+            Get::class    => RouteAttributesParser::class,
+            Post::class   => RouteAttributesParser::class,
+            Put::class    => RouteAttributesParser::class,
+            Patch::class  => RouteAttributesParser::class,
+            Head::class   => RouteAttributesParser::class,
             Delete::class => RouteAttributesParser::class,
         ];
     }

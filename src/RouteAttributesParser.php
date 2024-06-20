@@ -86,12 +86,10 @@ readonly class RouteAttributesParser implements AttributeParserInterface
                 path: $classRoute->path,
                 handler: $handlerClass,
                 constraints: $classRoute->constraints, // @phpstan-ignore-line
-                middlewars: $classRoute->middlewares
+                middlewares: $classRoute->middlewares,
+                name: $classRoute->name
             );
 
-            if ($classRoute->name) {
-                $this->routeGraph->addNamedRoute($classRoute->name, $classRoute->path);
-            }
         }
 
         $this->parseRoutesFromMethods($classRoute, $methods, $handlerClass);
@@ -134,12 +132,9 @@ readonly class RouteAttributesParser implements AttributeParserInterface
                         path: $rootPath . $methodAttribute->path,
                         handler: sprintf('%s#%s', $handlerClass, $handlerMethod),
                         constraints: $methodAttribute->constraints, // @phpstan-ignore-line
-                        middlewars: $methodAttribute->middlewares
+                        middlewares: $methodAttribute->middlewares,
+                        name: $methodAttribute->name,
                     );
-
-                    if ($methodAttribute->name) {
-                        $this->routeGraph->addNamedRoute($methodAttribute->name, $rootPath . $methodAttribute->path);
-                    }
                 }
             }
 

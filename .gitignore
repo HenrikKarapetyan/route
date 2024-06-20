@@ -5,4 +5,5 @@ vendor/
 phpmd-report.html
 .php-cs-fixer.cache
 
-public
+coverage
+.phpunit.cache
